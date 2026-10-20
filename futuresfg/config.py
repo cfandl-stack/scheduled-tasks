@@ -43,6 +43,9 @@ FRED_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv"
 OKX_SWAP = "BTC-USDT-SWAP"
 OKX_SPOT = "BTC-USDT"
 OKX_BTC_CT_VAL = 0.01  # BTC per BTC-USDT-SWAP contract
+# OKX keeps only ~24 h of liquidation orders, so the daily run at 00:20 UTC never sees
+# the whole previous day. Count a day as complete if at most this much of its start is missing.
+OKX_LIQ_MAX_GAP_HOURS = 4
 BINANCE_SYMBOL = "BTCUSDT"
 COINGLASS_EXCHANGES = "Binance,OKX,Bybit,Bitget,Hyperliquid,Gate,HTX,Bitmex,Deribit"
 
