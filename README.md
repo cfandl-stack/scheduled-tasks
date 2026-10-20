@@ -4,7 +4,8 @@ Alle Finanz-Tools in einem Repo. Jedes Tool läuft als GitHub Action, schreibt s
 
 | Tool | Ordner | Zeitplan (UTC) | Ausgabe |
 |---|---|---|---|
-| **Fear & Greed Index** (Nachbau der CNN-Methodik) | `feargreed/` | Mo–Fr 22:15 | `dashboard/data/feargreed.json` |
+| **Bitcoin Futures Fear & Greed** (10 Bausteine aus Futures-Markt, Flows und Makro) | `futuresfg/` | täglich 00:20 | `dashboard/data/futuresfg.json` (+ Rohdaten-Historie `futuresfg_raw.json`) |
+| **Aktienmarkt Fear & Greed** (Nachbau der CNN-Methodik) | `feargreed/` | Mo–Fr 22:15 | `dashboard/data/feargreed.json` |
 | **COT-Signale** (CFTC Commitment of Traders) | `cot/` | Fr 21:00 | `dashboard/data/cot.json` + E-Mail |
 | **Insider-Screener** (OpenInsider-Käufe) | `insider/` | Mo 07:00 | `dashboard/data/insider.json` |
 | **Research Report** (Claude + Websuche) | `research/` | alle 48 h, 06:17 | `dashboard/data/research*.json` + GitHub Issue |
@@ -31,6 +32,7 @@ Deployment: `.github/workflows/pages.yml` veröffentlicht `dashboard/` auf GitHu
    | Secret | Für | Pflicht |
    |---|---|---|
    | `ANTHROPIC_API_KEY` | Research Report | ohne Key wird der Report übersprungen |
+   | `COINGLASS_API_KEY` | Futures F&G: Liquidationen + ETF-Flows | optional, ohne Key werden freie Quellen genutzt |
    | `SENDER_EMAIL` | COT-E-Mail (Gmail-Adresse) | ohne wird nur das Dashboard befüllt |
    | `SENDER_PASSWORD` | COT-E-Mail (Gmail **App-Passwort**) | 〃 |
    | `RECIPIENT_EMAIL` | COT-E-Mail (Empfänger) | 〃 |
@@ -41,6 +43,7 @@ Deployment: `.github/workflows/pages.yml` veröffentlicht `dashboard/` auf GitHu
 
 ```bash
 pip install -r requirements.txt
+python -m futuresfg.main
 python -m feargreed.main
 python -m cot.main
 python -m insider.main

@@ -134,6 +134,30 @@
     .range-btns{display:flex;gap:4px;}
     .range-btns .btn.active{background:rgba(0,245,255,.2);}
 
+    /* ── FUTURES FEAR & GREED ─────────────────── */
+    .ffg{display:grid;grid-template-columns:1fr minmax(240px,320px) 1fr;gap:18px;align-items:center;
+      padding:20px;border:1px solid rgba(191,95,255,.25);
+      background:radial-gradient(circle at 50% 50%,rgba(191,95,255,.14),transparent 55%),var(--panel);}
+    .ffg-group{border:1px solid rgba(255,255,255,.08);padding:14px 16px;background:rgba(0,0,0,.25);}
+    .ffg-group h3{font-family:'Orbitron',sans-serif;font-size:.58rem;letter-spacing:3px;color:var(--dim);margin-bottom:6px;}
+    .ffg-group.left h3{text-align:right;}
+    .ffg-item{display:flex;align-items:center;gap:14px;padding:8px 0;}
+    .ffg-group.left .ffg-item{justify-content:flex-end;text-align:right;}
+    .ffg-name{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:700;font-size:.92rem;color:#e8e4f0;}
+    .ffg-val{font-size:.75rem;color:var(--dim);margin-top:2px;}
+    .ffg-err{font-size:.6rem;color:var(--dim);font-style:italic;}
+    .ffg-ring{flex-shrink:0;width:58px;height:58px;}
+    .ffg-center{text-align:center;}
+    .ffg-center svg{width:100%;max-width:300px;height:auto;}
+    .ffg-meta{font-size:.62rem;color:var(--dim);letter-spacing:1px;text-align:center;margin-top:10px;}
+    @media (max-width:900px){
+      .ffg{grid-template-columns:1fr;}
+      .ffg-center{order:-1;}
+      .ffg-group.left .ffg-item{flex-direction:row-reverse;justify-content:flex-end;text-align:left;}
+      .ffg-group.left h3{text-align:left;}
+    }
+    .sub-head{font-family:'Orbitron',sans-serif;font-size:.7rem;color:var(--purple);letter-spacing:3px;margin:26px 0 10px;}
+
     /* ── COT ─────────────────────────────────── */
     .cot-signal-card{background:rgba(57,255,20,.05);border:1px solid rgba(57,255,20,.3);padding:18px;margin-bottom:12px;}
     .cot-signal-title{font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:700;color:var(--green);letter-spacing:3px;margin-bottom:6px;}
@@ -225,6 +249,8 @@
 
   <!-- FEAR & GREED -->
   <section class="tab-panel" id="tab-feargreed">
+    <div id="ffg-container" class="loading">LADE FUTURES FEAR &amp; GREED…</div>
+    <div class="sub-head">// AKTIENMARKT · CNN-METHODIK</div>
     <div id="fg-container" class="loading">LADE FEAR &amp; GREED…</div>
   </section>
 
@@ -368,8 +394,8 @@ function gaugeSvg(score){
   return `<svg viewBox="0 0 400 210" role="img" aria-label="Fear & Greed ${score??''}">${arcs}${ticks}${needle}</svg>`;
 }
 
-function historySvg(history){
-  const pts = history.slice(-fgRange);
+function historySvg(history, range=fgRange){
+  const pts = history.slice(-range);
   if (pts.length < 2) return '<div class="muted">Zu wenig Verlauf.</div>';
   const W=900, H=260, L=34, R=10, T=10, B=26;
   const x = i => L + i*(W-L-R)/(pts.length-1);
@@ -397,7 +423,87 @@ function historySvg(history){
   </svg>`;
 }
 
+// Lila (Angst) → Magenta → Orange (Gier), wie im Original
+const FFG_STOPS = [[0,[139,92,246]],[40,[200,80,230]],[55,[255,110,60]],[100,[255,160,40]]];
+function ffgColor(s){
+  if (s==null) return 'var(--dim)';
+  for (let i=1;i<FFG_STOPS.length;i++){
+    const [b,cb] = FFG_STOPS[i], [a,ca] = FFG_STOPS[i-1];
+    if (s <= b){
+      const t = (s-a)/(b-a), c = ca.map((v,k) => Math.round(v+(cb[k]-v)*t));
+      return `rgb(${c.join(',')})`;
+    }
+  }
+  return 'rgb(255,160,40)';
+}
+function ringSvg(score, size, stroke, label, big=false){
+  const r = (size-stroke)/2 - 2, c = size/2, circ = 2*Math.PI*r;
+  const frac = score==null ? 0 : Math.max(0,Math.min(100,score))/100;
+  const col = ffgColor(score);
+  return `<svg viewBox="0 0 ${size} ${size}" class="${big?'':'ffg-ring'}">
+    <circle cx="${c}" cy="${c}" r="${r}" fill="rgba(10,8,20,.9)" stroke="rgba(255,255,255,.08)" stroke-width="${stroke}"/>
+    <circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="${col}" stroke-width="${stroke}" stroke-linecap="round"
+      stroke-dasharray="${(circ*frac).toFixed(1)} ${circ.toFixed(1)}" transform="rotate(-90 ${c} ${c})"
+      style="filter:drop-shadow(0 0 ${big?8:3}px ${col})"/>
+    ${label}
+  </svg>`;
+}
+let ffgRange = 365;
+function renderFutures(force=false){
+  const c = document.getElementById('ffg-container');
+  loadJson('futuresfg', force).then(d => {
+    const item = (k, side) => {
+      const ring = ringSvg(k.score, 64, 5,
+        `<text x="32" y="33" text-anchor="middle" dominant-baseline="middle" fill="${ffgColor(k.score)}"
+          font-family="system-ui,sans-serif" font-weight="800" font-size="17">${k.score==null?'–':E(k.score)}</text>`);
+      const txt = `<div><div class="ffg-name">${E(k.name_de)}</div><div class="ffg-val">${E(k.value_label)}</div>
+        ${k.score==null && k.error ? `<div class="ffg-err">${E(k.error)}</div>` : ''}</div>`;
+      const tip = escHtml(`${k.description_de||''}${k.source?' · Quelle: '+k.source:''}`);
+      return `<div class="ffg-item" title="${tip}">${side==='left' ? txt+ring : ring+txt}</div>`;
+    };
+    const groups = d.groups || [];
+    const grp = (g, side) => g ? `<div class="ffg-group ${side}"><h3>${E(String(g.name_de).toUpperCase())}</h3>
+      ${(g.components||[]).map(k => item(k, side)).join('')}</div>` : '<div></div>';
+    const center = ringSvg(d.index, 300, 14, `
+      <text x="150" y="80" text-anchor="middle" fill="var(--dim)" font-family="Orbitron,sans-serif" font-size="15" letter-spacing="3">INDEX</text>
+      <text x="150" y="170" text-anchor="middle" fill="${ffgColor(d.index)}" font-family="system-ui,sans-serif" font-weight="900" font-size="92">${E(d.index)}</text>
+      <text x="150" y="212" text-anchor="middle" fill="${ffgColor(d.index)}" font-family="system-ui,sans-serif" font-weight="700" font-size="24">${E(d.rating_de||d.rating)}</text>
+      <text x="150" y="240" text-anchor="middle" fill="var(--dim)" font-family="system-ui,sans-serif" font-size="14">7-Tage-Mittel</text>`, true);
+    const compare = [
+      ['Heute (Tageswert)', d.today], ['Vortag', d.previous_day],
+      ['Vor 1 Woche', d.one_week_ago], ['Vor 1 Monat', d.one_month_ago],
+    ].map(([l,v]) => `<div>${l}<br><span class="muted">${E(fgLabel(v))}</span></div>
+      <div><span class="fg-dot" style="background:${ffgColor(v)}">${E(v)}</span></div>`).join('');
+    const hist = (d.history||[]).map(h => ({date:h.date, score:h.index}));
+
+    c.className = '';
+    c.innerHTML = `
+      <div class="section-head" style="color:var(--purple)">// BITCOIN FUTURES FEAR &amp; GREED <span class="muted">Stand ${E(d.as_of)}</span></div>
+      <div class="ffg">
+        ${grp(groups[0], 'left')}
+        <div class="ffg-center">${center}<div class="ffg-meta">Tageswert ${E(d.today)} · Vortag ${E(d.previous_day)}</div></div>
+        ${grp(groups[1], 'right')}
+      </div>
+      <div class="fg-top" style="margin-top:12px">
+        <div class="card fg-chart">
+          <div class="section-head">// VERLAUF (7-TAGE-MITTEL)
+            <span class="range-btns">${[[30,'1M'],[90,'3M'],[180,'6M'],[365,'1J']].map(([n,l]) =>
+              `<button class="btn ${ffgRange===n?'active':''}" data-ffg-range="${n}">${l}</button>`).join('')}</span>
+          </div>
+          ${historySvg(hist, ffgRange)}
+        </div>
+        <div class="card">
+          <div class="section-head">// VERGLEICH</div>
+          <div class="fg-compare">${compare}</div>
+        </div>
+      </div>
+      <div class="footer-note">10 Bausteine, jeder gegen seine eigenen letzten 365 Tage gemessen, gleich gewichtet · Generiert ${E(fmtTs(d.generated_at))}</div>`;
+    c.querySelectorAll('[data-ffg-range]').forEach(b => b.addEventListener('click', () => { ffgRange = +b.dataset.ffgRange; renderFutures(); }));
+  }).catch(e => { c.className=''; c.innerHTML = errorBox('FUTURES FEAR & GREED', e); });
+}
+
 function renderFearGreed(force=false){
+  renderFutures(force);
   const c = document.getElementById('fg-container');
   loadJson('feargreed', force).then(d => {
     const compare = [
@@ -557,13 +663,25 @@ function renderResearch(force=false){
 // ─── ÜBERSICHT ────────────────────────────────────────────
 function renderOverview(){
   const set = (id, html) => { const el = document.getElementById(id); el.className=''; el.innerHTML = html; };
-  loadJson('feargreed').then(d => set('ov-fg',
-    `<div style="display:flex;align-items:center;gap:18px">
-       <div style="width:160px">${gaugeSvg(d.score)}</div>
-       <div><div class="big-num" style="color:${fgColor(d.score)}">${E(d.score)}</div>
-         <div class="fg-rating" style="color:${fgColor(d.score)}">${E(d.rating_de||d.rating)}</div>
-         <div class="muted" style="margin-top:6px">Vortag ${E(d.previous_close)} · Woche ${E(d.one_week_ago)} · Monat ${E(d.one_month_ago)}</div></div>
-     </div>`)).catch(e => set('ov-fg', errorBox('FEAR & GREED', e)));
+  Promise.allSettled([loadJson('futuresfg'), loadJson('feargreed')]).then(([fut, stk]) => {
+    if (fut.status==='rejected' && stk.status==='rejected') return set('ov-fg', errorBox('FEAR & GREED', fut.reason));
+    let html = '<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">';
+    if (fut.status==='fulfilled'){
+      const d = fut.value;
+      html += `<div style="width:120px">${ringSvg(d.index, 300, 14, `<text x="150" y="175" text-anchor="middle" fill="${ffgColor(d.index)}"
+          font-family="system-ui,sans-serif" font-weight="900" font-size="110">${E(d.index)}</text>`, true)}</div>
+        <div><div class="muted">BTC FUTURES · 7-TAGE-MITTEL</div>
+          <div class="fg-rating" style="color:${ffgColor(d.index)};margin-top:4px">${E(d.rating_de||d.rating)}</div>
+          <div class="muted" style="margin-top:6px">Heute ${E(d.today)} · Woche ${E(d.one_week_ago)} · Monat ${E(d.one_month_ago)}</div></div>`;
+    }
+    if (stk.status==='fulfilled'){
+      const d = stk.value;
+      html += `<div style="margin-left:auto;text-align:right"><div class="muted">AKTIEN (CNN)</div>
+        <div class="big-num" style="font-size:1.4rem;color:${fgColor(d.score)}">${E(d.score)}</div>
+        <div class="muted" style="color:${fgColor(d.score)}">${E(d.rating_de||d.rating)}</div></div>`;
+    }
+    set('ov-fg', html + '</div>');
+  });
 
   loadJson('cot').then(d => set('ov-cot',
     `<div class="big-num" style="color:${d.signal_count?'var(--green)':'var(--dim)'}">${E(d.signal_count)}</div>
