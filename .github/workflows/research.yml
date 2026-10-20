@@ -1,0 +1,74 @@
+name: Research Report
+
+on:
+  schedule:
+    # Every 48h at 06:17 UTC (odd days of the month)
+    - cron: '17 6 */2 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: data-commit
+  cancel-in-progress: false
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check API key
+        id: key
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::warning::ANTHROPIC_API_KEY secret is not set - skipping research report"
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-python@v5
+        if: steps.key.outputs.present == 'true'
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        if: steps.key.outputs.present == 'true'
+        run: pip install -r requirements.txt
+
+      - name: Generate research report
+        if: steps.key.outputs.present == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python -m research.main
+
+      - name: Create GitHub issue
+        if: steps.key.outputs.present == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create report --color 0E8A16 --description "Automated research report" --force
+          gh issue create \
+            --title "Research Report $(date -u +'%d.%m.%Y')" \
+            --body-file report.md \
+            --label report
+
+      - name: Commit dashboard data
+        if: steps.key.outputs.present == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard/data/research.json dashboard/data/research_history.json
+          if git diff --cached --quiet; then
+            echo "No data changes"
+            exit 0
+          fi
+          git commit -m "chore(data): update research report [skip ci]"
+          git pull --rebase origin ${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}
