@@ -6,7 +6,7 @@ on:
     paths:
       - 'dashboard/**'
   workflow_run:
-    workflows: [COT Trading Alert, Insider Screener, Fear & Greed Index, Research Report]
+    workflows: [COT Trading Alert, Insider Screener, Fear & Greed Index, Futures Fear & Greed, Research Report]
     types: [completed]
   workflow_dispatch:
 
