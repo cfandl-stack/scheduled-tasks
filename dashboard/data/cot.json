@@ -1,0 +1,44 @@
+{
+  "generated_at": "2026-10-20T10:15:30Z",
+  "report_date": "2026-10-20",
+  "signal_count": 0,
+  "buy_signals": [],
+  "full_status": [
+    {
+      "commodity": "Gold",
+      "commercial_signal": false,
+      "trend_signal": false,
+      "combined": false
+    },
+    {
+      "commodity": "Silver",
+      "commercial_signal": false,
+      "trend_signal": false,
+      "combined": false
+    },
+    {
+      "commodity": "Crude Oil (WTI)",
+      "commercial_signal": false,
+      "trend_signal": true,
+      "combined": false
+    },
+    {
+      "commodity": "E-mini S&P 500",
+      "commercial_signal": false,
+      "trend_signal": false,
+      "combined": false
+    },
+    {
+      "commodity": "10-Year Treasury",
+      "commercial_signal": true,
+      "trend_signal": false,
+      "combined": false
+    },
+    {
+      "commodity": "Natural Gas",
+      "commercial_signal": false,
+      "trend_signal": false,
+      "combined": false
+    }
+  ]
+}
