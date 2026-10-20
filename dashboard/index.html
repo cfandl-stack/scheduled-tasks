@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⬡ FINANZTOOLS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:     #07070f;
+      --panel:  #0b0b1a;
+      --cyan:   #00f5ff;
+      --mag:    #ff00a0;
+      --green:  #39ff14;
+      --purple: #bf5fff;
+      --yellow: #ffe600;
+      --orange: #ff8c1a;
+      --red:    #ff3c3c;
+      --text:   #a8cce0;
+      --dim:    #5a7384;
+      --border: rgba(0,245,255,0.13);
+      --glow-c: 0 0 8px rgba(0,245,255,0.45),0 0 18px rgba(0,245,255,0.1);
+      --glow-g: 0 0 8px rgba(57,255,20,0.45);
+      --glow-r: 0 0 8px rgba(255,60,60,0.45),0 0 18px rgba(255,60,60,0.1);
+      /* Fear & Greed Bänder */
+      --fg-xfear: #ff3c3c;
+      --fg-fear:  #ff8c1a;
+      --fg-neut:  #ffe600;
+      --fg-greed: #9dff3c;
+      --fg-xgreed:#39ff14;
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    body{background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace;min-height:100vh;}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+      background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.045) 3px,rgba(0,0,0,0.045) 4px);}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+      background-image:linear-gradient(rgba(0,245,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,0.02) 1px,transparent 1px);
+      background-size:48px 48px;}
+    a{color:var(--cyan);}
+
+    .app{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:12px 16px 32px;display:flex;flex-direction:column;gap:12px;}
+
+    /* ── HEADER ────────────────────────────────── */
+    .header{
+      display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;
+      padding:12px 20px;background:var(--panel);border:1px solid var(--border);border-bottom:2px solid var(--cyan);
+      position:relative;overflow:hidden;
+    }
+    .header::after{content:'';position:absolute;top:0;left:-100%;width:45%;height:2px;
+      background:linear-gradient(90deg,transparent,var(--cyan),var(--mag),transparent);
+      animation:scanline 4s linear infinite;}
+    @keyframes scanline{to{left:150%;}}
+    .logo{font-family:'Orbitron',sans-serif;font-size:1.15rem;font-weight:900;
+      color:var(--cyan);text-shadow:var(--glow-c);letter-spacing:5px;}
+    .logo span{color:var(--mag);}
+    .hdr-sub{font-size:.62rem;color:var(--dim);letter-spacing:2px;margin-top:3px;}
+    .clock-time{font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:700;
+      color:var(--cyan);text-shadow:var(--glow-c);letter-spacing:3px;text-align:right;}
+    .clock-date{font-size:.58rem;color:var(--dim);letter-spacing:2px;text-transform:uppercase;text-align:right;}
+
+    /* ── TICKER BAR ────────────────────────────── */
+    .ticker-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;}
+    .tick{background:var(--panel);border:1px solid rgba(255,60,60,.18);padding:12px 16px;display:flex;align-items:center;gap:12px;}
+    .tick-symbol{font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:900;color:var(--red);letter-spacing:2px;min-width:52px;}
+    .tick-price{font-family:'Orbitron',sans-serif;font-size:.95rem;font-weight:700;color:var(--text);letter-spacing:1px;flex:1;}
+    .tick-change{font-size:.72rem;font-weight:700;padding:3px 8px;border:1px solid;min-width:68px;text-align:center;}
+    .tick-change.up{color:var(--green);border-color:rgba(57,255,20,.3);background:rgba(57,255,20,.06);}
+    .tick-change.down{color:var(--red);border-color:rgba(255,60,60,.3);background:rgba(255,60,60,.06);}
+    .tick-change.neutral{color:var(--dim);border-color:var(--border);}
+    .tick-loading{color:var(--dim);font-size:.6rem;letter-spacing:1px;}
+    @media (max-width:520px){
+      .ticker-bar{grid-template-columns:repeat(3,1fr);gap:6px;}
+      .tick{flex-direction:column;align-items:flex-start;gap:4px;padding:8px 10px;}
+      .tick-price{font-size:.7rem;}
+      .tick-change{min-width:0;font-size:.6rem;}
+    }
+    .ticker-update{text-align:right;font-size:.55rem;color:var(--dim);letter-spacing:1px;margin-top:-6px;}
+
+    /* ── TABS ─────────────────────────────────── */
+    .tabs{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--border);padding-bottom:6px;}
+    .tab{font-family:'Orbitron',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:2px;padding:9px 16px;cursor:pointer;
+      border:1px solid var(--border);background:transparent;color:var(--dim);transition:all .2s;}
+    .tab:hover{border-color:rgba(0,245,255,.4);color:var(--text);}
+    .tab.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,245,255,.06);box-shadow:var(--glow-c);}
+    .tab-panel{display:none;}
+    .tab-panel.active{display:block;}
+
+    .section-head{font-family:'Orbitron',sans-serif;font-size:.62rem;font-weight:700;color:var(--cyan);letter-spacing:3px;
+      padding:8px 0 6px;border-bottom:1px solid var(--border);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+    .card{background:var(--panel);border:1px solid var(--border);padding:16px;}
+    .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px;}
+    .muted{color:var(--dim);font-size:.62rem;letter-spacing:1px;}
+    .footer-note{font-size:.55rem;color:var(--dim);letter-spacing:1px;text-align:right;padding:8px 4px;}
+    .loading{text-align:center;padding:24px;color:var(--dim);font-size:.7rem;letter-spacing:2px;}
+    .error{text-align:center;padding:24px;color:var(--red);font-size:.7rem;letter-spacing:1px;line-height:1.6;}
+    .btn{font-family:'Orbitron',sans-serif;font-size:.5rem;font-weight:700;letter-spacing:2px;padding:5px 11px;cursor:pointer;
+      border:1px solid var(--cyan);background:rgba(0,245,255,.06);color:var(--cyan);text-transform:uppercase;}
+    .btn:hover{box-shadow:var(--glow-c);}
+    .overview-link{cursor:pointer;transition:border-color .2s;}
+    .overview-link:hover{border-color:rgba(0,245,255,.45);}
+    .big-num{font-family:'Orbitron',sans-serif;font-size:2rem;font-weight:900;letter-spacing:2px;}
+
+    /* ── TABLES ─────────────────────────────── */
+    .table-wrap{overflow-x:auto;}
+    table.data{width:100%;border-collapse:collapse;font-size:.7rem;}
+    table.data th{font-family:'Orbitron',sans-serif;font-size:.48rem;font-weight:700;color:var(--dim);letter-spacing:2px;text-transform:uppercase;
+      text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);background:rgba(0,245,255,.03);white-space:nowrap;}
+    table.data td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.04);white-space:nowrap;}
+    table.data tr:hover td{background:rgba(0,245,255,.03);}
+    .num{text-align:right;font-variant-numeric:tabular-nums;}
+    .pos{color:var(--green);}
+    .neg{color:var(--red);}
+    .ticker{color:var(--green);font-weight:700;}
+    .tag{display:inline-block;font-size:.52rem;padding:1px 6px;border:1px solid var(--purple);color:var(--purple);letter-spacing:1px;margin-left:4px;}
+
+    /* ── FEAR & GREED ─────────────────────────── */
+    .fg-top{display:grid;grid-template-columns:minmax(260px,1.1fr) 1fr;gap:12px;}
+    @media (max-width:760px){.fg-top{grid-template-columns:1fr;}}
+    .gauge-wrap{text-align:center;}
+    .gauge-wrap svg{width:100%;max-width:380px;height:auto;}
+    .fg-score{font-family:'Orbitron',sans-serif;font-size:2.6rem;font-weight:900;margin-top:-10px;}
+    .fg-rating{font-family:'Orbitron',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;}
+    .fg-compare{display:grid;grid-template-columns:1fr auto;gap:0;}
+    .fg-compare div{padding:10px 4px;border-bottom:1px solid rgba(255,255,255,.05);font-size:.72rem;}
+    .fg-pill{display:inline-flex;align-items:center;gap:8px;}
+    .fg-dot{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+      font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:700;color:#07070f;}
+    .fg-components{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px;}
+    .fg-comp h4{font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:2px;margin-bottom:8px;color:var(--text);display:flex;justify-content:space-between;gap:8px;}
+    .fg-bar{height:8px;background:linear-gradient(90deg,var(--fg-xfear),var(--fg-fear),var(--fg-neut),var(--fg-greed),var(--fg-xgreed));position:relative;margin:10px 0 8px;opacity:.85;}
+    .fg-bar i{position:absolute;top:-4px;width:3px;height:16px;background:#fff;box-shadow:0 0 6px #fff;transform:translateX(-1px);}
+    .fg-comp p{font-size:.62rem;color:var(--dim);line-height:1.5;}
+    .fg-chart svg{width:100%;height:auto;display:block;}
+    .range-btns{display:flex;gap:4px;}
+    .range-btns .btn.active{background:rgba(0,245,255,.2);}
+
+    /* ── COT ─────────────────────────────────── */
+    .cot-signal-card{background:rgba(57,255,20,.05);border:1px solid rgba(57,255,20,.3);padding:18px;margin-bottom:12px;}
+    .cot-signal-title{font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:700;color:var(--green);letter-spacing:3px;margin-bottom:6px;}
+    .cot-etf{display:inline-block;padding:3px 10px;border:1px solid var(--green);color:var(--green);font-family:'Orbitron',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:2px;margin-bottom:10px;}
+    .cot-detail{width:100%;border-collapse:collapse;font-size:.66rem;}
+    .cot-detail td{padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.04);}
+    .cot-detail td:first-child{color:var(--dim);}
+    .cot-detail td:last-child{text-align:right;}
+    .cot-no-signal{text-align:center;padding:28px;font-family:'Orbitron',sans-serif;font-size:.6rem;color:var(--dim);letter-spacing:2px;}
+
+    /* ── RECHNER ─────────────────────────────── */
+    .calc-wrap{max-width:580px;margin:0 auto;}
+    .calc-direction{display:flex;border:1px solid var(--border);margin-bottom:16px;}
+    .dir-btn{flex:1;padding:10px;font-family:'Orbitron',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:2px;cursor:pointer;border:none;background:transparent;color:var(--dim);}
+    .dir-btn.long.active{background:rgba(57,255,20,.1);color:var(--green);}
+    .dir-btn.short.active{background:rgba(255,60,60,.1);color:var(--red);}
+    .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .calc-field label{display:block;font-size:.52rem;color:var(--dim);letter-spacing:2px;margin-bottom:5px;}
+    .calc-input{width:100%;background:rgba(0,245,255,.03);border:1px solid rgba(0,245,255,.2);color:var(--text);font-family:'Share Tech Mono',monospace;font-size:.95rem;padding:10px 12px;outline:none;}
+    .calc-input:focus{border-color:var(--cyan);}
+    .calc-error{color:var(--red);font-size:.62rem;min-height:1.2em;margin:6px 0;}
+    .calc-results{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px;}
+    @media (max-width:520px){.calc-results,.calc-grid{grid-template-columns:1fr;}}
+    .calc-result{background:var(--panel);border:1px solid var(--border);padding:16px;text-align:center;}
+    .calc-result-label{font-size:.5rem;color:var(--dim);letter-spacing:2px;margin-bottom:8px;}
+    .calc-result-value{font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:700;color:var(--cyan);}
+    .calc-result.posz .calc-result-value{color:var(--green);}
+
+    /* ── RESEARCH ─────────────────────────────── */
+    .md{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:.92rem;line-height:1.65;color:#cfe3ef;max-width:860px;}
+    .md h1{font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--cyan);letter-spacing:2px;margin:6px 0 14px;}
+    .md h2{font-family:'Orbitron',sans-serif;font-size:.78rem;color:var(--mag);letter-spacing:2px;margin:22px 0 8px;}
+    .md h3{font-size:.95rem;color:var(--text);margin:14px 0 6px;}
+    .md p{margin:8px 0;}
+    .md ul,.md ol{margin:6px 0 6px 22px;}
+    .md li{margin:4px 0;}
+    .md hr{border:none;border-top:1px solid var(--border);margin:16px 0;}
+    .md code{background:rgba(0,245,255,.08);padding:1px 4px;}
+    .research-select{background:var(--panel);color:var(--text);border:1px solid var(--border);font-family:inherit;padding:4px 8px;}
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <header class="header">
+    <div>
+      <div class="logo">⬡ FINANZ<span>//</span>TOOLS</div>
+      <div class="hdr-sub">FEAR &amp; GREED // COT SIGNALS // INSIDER SCREENER // RESEARCH // RECHNER</div>
+    </div>
+    <div>
+      <div class="clock-time" id="clock">00:00:00</div>
+      <div class="clock-date" id="cdate">–</div>
+    </div>
+  </header>
+
+  <div class="ticker-bar" id="ticker-bar"></div>
+  <div class="ticker-update" id="ticker-update"></div>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab" data-tab="overview">⬡ ÜBERSICHT</button>
+    <button class="tab" data-tab="feargreed">⚖ FEAR &amp; GREED</button>
+    <button class="tab" data-tab="cot">📡 COT</button>
+    <button class="tab" data-tab="insider">📊 INSIDER</button>
+    <button class="tab" data-tab="research">🔎 RESEARCH</button>
+    <button class="tab" data-tab="rechner">⬡ RECHNER</button>
+  </nav>
+
+  <!-- ÜBERSICHT -->
+  <section class="tab-panel" id="tab-overview">
+    <div class="grid-2">
+      <div class="card overview-link" data-goto="feargreed">
+        <div class="section-head">// FEAR &amp; GREED</div>
+        <div id="ov-fg" class="loading">LADE…</div>
+      </div>
+      <div class="card overview-link" data-goto="cot">
+        <div class="section-head">// COT SIGNALE</div>
+        <div id="ov-cot" class="loading">LADE…</div>
+      </div>
+      <div class="card overview-link" data-goto="insider">
+        <div class="section-head">// TOP INSIDER-KÄUFE</div>
+        <div id="ov-insider" class="loading">LADE…</div>
+      </div>
+      <div class="card overview-link" data-goto="research">
+        <div class="section-head">// RESEARCH REPORT</div>
+        <div id="ov-research" class="loading">LADE…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEAR & GREED -->
+  <section class="tab-panel" id="tab-feargreed">
+    <div id="fg-container" class="loading">LADE FEAR &amp; GREED…</div>
+  </section>
+
+  <!-- COT -->
+  <section class="tab-panel" id="tab-cot">
+    <div id="cot-container" class="loading">LADE COT-SIGNALE…</div>
+  </section>
+
+  <!-- INSIDER -->
+  <section class="tab-panel" id="tab-insider">
+    <div id="insider-container" class="loading">LADE INSIDER-DATEN…</div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section class="tab-panel" id="tab-research">
+    <div id="research-container" class="loading">LADE RESEARCH REPORT…</div>
+  </section>
+
+  <!-- RECHNER -->
+  <section class="tab-panel" id="tab-rechner">
+    <div class="calc-wrap">
+      <div class="section-head">// POSITIONS-RECHNER</div>
+      <div class="calc-direction">
+        <button class="dir-btn long active" id="dir-long" onclick="setDirection('long')">LONG</button>
+        <button class="dir-btn short" id="dir-short" onclick="setDirection('short')">SHORT</button>
+      </div>
+      <div class="calc-grid">
+        <div class="calc-field">
+          <label for="calc-kapital">KONTOKAPITAL ($)</label>
+          <input class="calc-input" type="number" id="calc-kapital" placeholder="10000" min="0" oninput="calcPositions()">
+        </div>
+        <div class="calc-field">
+          <label for="calc-risiko">RISIKO (%)</label>
+          <input class="calc-input" type="number" id="calc-risiko" placeholder="2" min="0" step="0.1" oninput="calcPositions()">
+        </div>
+        <div class="calc-field">
+          <label for="calc-entry">ENTRY-PREIS ($)</label>
+          <input class="calc-input" type="number" id="calc-entry" placeholder="100" min="0" oninput="calcPositions()">
+        </div>
+        <div class="calc-field">
+          <label for="calc-sl">STOP LOSS ($)</label>
+          <input class="calc-input" type="number" id="calc-sl" placeholder="95" min="0" oninput="calcPositions()">
+        </div>
+      </div>
+      <div id="calc-error" class="calc-error"></div>
+      <div class="calc-results">
+        <div class="calc-result"><div class="calc-result-label">HEBEL</div><div class="calc-result-value" id="result-hebel">—</div></div>
+        <div class="calc-result"><div class="calc-result-label">MARGIN</div><div class="calc-result-value" id="result-margin">—</div></div>
+        <div class="calc-result posz"><div class="calc-result-label">POSITIONSGRÖSSE</div><div class="calc-result-value" id="result-pos">—</div></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+<script>
+// ─── HELFER ───────────────────────────────────────────────
+function escHtml(s){
+  return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+const E = s => escHtml(s==null?'–':s);
+const fmtUsd = (v,d=0) => v==null ? '–' : '$'+Number(v).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+const fmtInt = v => v==null ? '–' : Number(v).toLocaleString('de-DE');
+const fmtTs  = s => s ? String(s).substring(0,16).replace('T',' ')+' UTC' : '–';
+
+const cache = {};
+function loadJson(name, force=false){
+  if (!force && cache[name]) return cache[name];
+  cache[name] = fetch(`data/${name}.json`, {cache:'no-store'})
+    .then(r => { if (!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .catch(e => { delete cache[name]; throw e; });
+  return cache[name];
+}
+function errorBox(what, e){
+  return `<div class="error">⚠ ${escHtml(what)} NICHT VERFÜGBAR (${escHtml(e.message)})<br>
+    <span class="muted">Der zugehörige GitHub-Action-Workflow ist evtl. noch nicht gelaufen.</span></div>`;
+}
+
+// ─── UHR ──────────────────────────────────────────────────
+const DAYS=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+const MONTHS=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+function tick(){
+  const n=new Date(),p=v=>String(v).padStart(2,'0');
+  document.getElementById('clock').textContent=`${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`;
+  document.getElementById('cdate').textContent=`${DAYS[n.getDay()]}, ${n.getDate()}. ${MONTHS[n.getMonth()]} ${n.getFullYear()}`;
+}
+setInterval(tick,1000);tick();
+
+// ─── TABS ─────────────────────────────────────────────────
+const TABS = ['overview','feargreed','cot','insider','research','rechner'];
+const LOADERS = {
+  overview: renderOverview, feargreed: renderFearGreed, cot: renderCot,
+  insider: renderInsider, research: renderResearch,
+};
+function showTab(name){
+  if (!TABS.includes(name)) name = 'overview';
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab===name));
+  TABS.forEach(t => document.getElementById('tab-'+t).classList.toggle('active', t===name));
+  if (LOADERS[name]) LOADERS[name]();
+  if (location.hash.slice(1)!==name) history.replaceState(null,'','#'+name);
+}
+document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+document.querySelectorAll('[data-goto]').forEach(c => c.addEventListener('click', () => showTab(c.dataset.goto)));
+window.addEventListener('hashchange', () => showTab(location.hash.slice(1)));
+
+// ─── FEAR & GREED ─────────────────────────────────────────
+const FG_BANDS = [
+  {max:24,  key:'xfear',  de:'Extreme Angst', color:'var(--fg-xfear)'},
+  {max:44,  key:'fear',   de:'Angst',         color:'var(--fg-fear)'},
+  {max:55,  key:'neut',   de:'Neutral',       color:'var(--fg-neut)'},
+  {max:75,  key:'greed',  de:'Gier',          color:'var(--fg-greed)'},
+  {max:100, key:'xgreed', de:'Extreme Gier',  color:'var(--fg-xgreed)'},
+];
+const fgBand  = s => FG_BANDS.find(b => s <= b.max) || FG_BANDS[4];
+const fgColor = s => s==null ? 'var(--dim)' : fgBand(s).color;
+const fgLabel = s => s==null ? '–' : fgBand(s).de;
+let fgRange = 365;
+
+function gaugeSvg(score){
+  const cx=200, cy=190, r=150, w=28;
+  const pt = (v, rad) => {
+    const a = Math.PI * (1 - v/100);
+    return [cx + rad*Math.cos(a), cy - rad*Math.sin(a)];
+  };
+  let arcs = '', from = 0;
+  FG_BANDS.forEach(b => {
+    const to = b.max===100 ? 100 : b.max+0.5;
+    const [x1,y1] = pt(from+0.6, r), [x2,y2] = pt(to-0.6, r);
+    arcs += `<path d="M${x1},${y1} A${r},${r} 0 0 1 ${x2},${y2}" stroke="${b.color}" stroke-width="${w}" fill="none" opacity="${score!=null && fgBand(score)===b ? 1 : .35}"/>`;
+    from = to;
+  });
+  const ticks = [0,25,50,75,100].map(v => {
+    const [x,y] = pt(v, r+w/2+12);
+    return `<text x="${x}" y="${y}" fill="var(--dim)" font-size="11" text-anchor="middle" dominant-baseline="middle" font-family="Share Tech Mono">${v}</text>`;
+  }).join('');
+  let needle = '';
+  if (score!=null){
+    const [nx,ny] = pt(score, r-w/2-8);
+    needle = `<line x1="${cx}" y1="${cy}" x2="${nx}" y2="${ny}" stroke="#fff" stroke-width="3" stroke-linecap="round" style="filter:drop-shadow(0 0 4px #fff)"/>
+      <circle cx="${cx}" cy="${cy}" r="8" fill="#fff"/>`;
+  }
+  return `<svg viewBox="0 0 400 210" role="img" aria-label="Fear & Greed ${score??''}">${arcs}${ticks}${needle}</svg>`;
+}
+
+function historySvg(history){
+  const pts = history.slice(-fgRange);
+  if (pts.length < 2) return '<div class="muted">Zu wenig Verlauf.</div>';
+  const W=900, H=260, L=34, R=10, T=10, B=26;
+  const x = i => L + i*(W-L-R)/(pts.length-1);
+  const y = v => T + (100-v)*(H-T-B)/100;
+  let bg = '', lo = 0;
+  FG_BANDS.forEach(b => {
+    bg += `<rect x="${L}" y="${y(b.max)}" width="${W-L-R}" height="${y(lo)-y(b.max)}" fill="${b.color}" opacity=".07"/>`;
+    lo = b.max;
+  });
+  const grid = [0,25,50,75,100].map(v =>
+    `<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(255,255,255,.07)"/>
+     <text x="${L-6}" y="${y(v)}" fill="var(--dim)" font-size="10" text-anchor="end" dominant-baseline="middle">${v}</text>`).join('');
+  const line = pts.map((p,i) => `${i?'L':'M'}${x(i).toFixed(1)},${y(p.score).toFixed(1)}`).join('');
+  const nLab = 6, labels = [];
+  for (let k=0;k<nLab;k++){
+    const i = Math.round(k*(pts.length-1)/(nLab-1));
+    labels.push(`<text x="${x(i)}" y="${H-8}" fill="var(--dim)" font-size="10" text-anchor="${k===0?'start':k===nLab-1?'end':'middle'}">${escHtml(pts[i].date)}</text>`);
+  }
+  const last = pts[pts.length-1];
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Fear & Greed Verlauf">
+    ${bg}${grid}
+    <path d="${line}" fill="none" stroke="var(--cyan)" stroke-width="2" style="filter:drop-shadow(0 0 3px rgba(0,245,255,.6))"/>
+    <circle cx="${x(pts.length-1)}" cy="${y(last.score)}" r="4" fill="${fgColor(last.score)}"/>
+    ${labels.join('')}
+  </svg>`;
+}
+
+function renderFearGreed(force=false){
+  const c = document.getElementById('fg-container');
+  loadJson('feargreed', force).then(d => {
+    const compare = [
+      ['Vortag', d.previous_close], ['Vor 1 Woche', d.one_week_ago],
+      ['Vor 1 Monat', d.one_month_ago], ['Vor 1 Jahr', d.one_year_ago],
+    ].map(([l,v]) => `<div>${l}<br><span class="muted">${E(fgLabel(v))}</span></div>
+      <div><span class="fg-dot" style="background:${fgColor(v)}">${E(v)}</span></div>`).join('');
+
+    const comps = (d.components||[]).map(k => {
+      const ok = k.score!=null;
+      return `<div class="card fg-comp">
+        <h4><span>${E(k.name_de||k.name)}</span><span style="color:${fgColor(k.score)}">${ok ? E(k.rating_de||k.rating) : 'FEHLER'}</span></h4>
+        ${ok ? `<div class="fg-bar"><i style="left:${Math.max(0,Math.min(100,k.score))}%"></i></div>
+          <div class="muted" style="margin-bottom:6px">Score ${E(k.score)} · ${E(k.value_label)}</div>`
+             : `<div class="error" style="padding:6px;text-align:left">${E(k.error)}</div>`}
+        <p>${E(k.description_de)}</p>
+      </div>`;
+    }).join('');
+
+    c.className = '';
+    c.innerHTML = `
+      <div class="fg-top">
+        <div class="card gauge-wrap">
+          <div class="section-head">// FEAR &amp; GREED INDEX <span class="muted">Stand ${E(d.as_of)}</span></div>
+          ${gaugeSvg(d.score)}
+          <div class="fg-score" style="color:${fgColor(d.score)}">${E(d.score)}</div>
+          <div class="fg-rating" style="color:${fgColor(d.score)}">${E(d.rating_de||d.rating)}</div>
+        </div>
+        <div class="card">
+          <div class="section-head">// VERGLEICH</div>
+          <div class="fg-compare">${compare}</div>
+        </div>
+      </div>
+      <div class="card fg-chart" style="margin-top:12px">
+        <div class="section-head">// VERLAUF
+          <span class="range-btns">${[[30,'1M'],[90,'3M'],[180,'6M'],[365,'1J']].map(([n,l]) =>
+            `<button class="btn ${fgRange===n?'active':''}" data-range="${n}">${l}</button>`).join('')}</span>
+        </div>
+        ${historySvg(d.history||[])}
+      </div>
+      <div class="fg-components">${comps}</div>
+      <div class="footer-note">Eigene Berechnung nach CNN-Methodik (7 Indikatoren, gleich gewichtet) · Generiert ${E(fmtTs(d.generated_at))}</div>`;
+    c.querySelectorAll('[data-range]').forEach(b => b.addEventListener('click', () => { fgRange = +b.dataset.range; renderFearGreed(); }));
+  }).catch(e => { c.className=''; c.innerHTML = errorBox('FEAR & GREED', e); });
+}
+
+// ─── COT ──────────────────────────────────────────────────
+function renderCot(force=false){
+  const c = document.getElementById('cot-container');
+  loadJson('cot', force).then(d => {
+    let html = '<div class="section-head">// COT BUY-SIGNALE</div>';
+    if (d.buy_signals && d.buy_signals.length){
+      d.buy_signals.forEach(s => {
+        const com = s.commercial||{}, tr = s.trend||{};
+        html += `<div class="cot-signal-card">
+          <div class="cot-signal-title">🟢 BUY — ${E(s.commodity)}</div>
+          <div class="cot-etf">${E(s.etf)} (2× ETF)</div>
+          <div class="muted" style="margin-bottom:10px">Halten bis: <strong style="color:var(--text)">${E(s.hold_until)}</strong> (4 Wochen)</div>
+          <table class="cot-detail">
+            <tr><td>Commercial Long (aktuell)</td><td>${fmtInt(com.current_long)}</td></tr>
+            <tr><td>52W Prior Max</td><td>${fmtInt(com.prior_52w_max)}</td></tr>
+            <tr><td>COT Report Datum</td><td>${E(com.report_date)}</td></tr>
+            <tr><td>Aktueller Kurs</td><td>${fmtUsd(tr.latest_close,2)}</td></tr>
+            <tr><td>50-Day SMA</td><td>${fmtUsd(tr.sma50,2)}</td></tr>
+            <tr><td>200-Day SMA</td><td>${fmtUsd(tr.sma200,2)}</td></tr>
+          </table></div>`;
+      });
+    } else {
+      html += '<div class="cot-no-signal card">KEINE BUY-SIGNALE DIESE WOCHE</div>';
+    }
+    if (d.full_status && d.full_status.length){
+      const yn = v => v ? '<span class="pos">✔ JA</span>' : '<span class="muted">✘ NEIN</span>';
+      html += `<div class="section-head" style="margin-top:18px">// STATUS ALLER MÄRKTE</div>
+        <div class="table-wrap"><table class="data"><thead><tr>
+          <th>Markt</th><th>Commercials 52W-Hoch</th><th>Aufwärtstrend</th><th>Signal</th>
+        </tr></thead><tbody>${d.full_status.map(s => `<tr><td>${E(s.commodity)}</td><td>${yn(s.commercial_signal)}</td>
+          <td>${yn(s.trend_signal)}</td><td>${s.combined ? '<strong class="pos">🟢 BUY</strong>' : '—'}</td></tr>`).join('')}
+        </tbody></table></div>`;
+    }
+    html += `<div class="footer-note">Signal = Commercials auf 52-Wochen-Hoch UND Kurs &gt; SMA50 &gt; SMA200 · Report ${E(d.report_date)} · Generiert ${E(fmtTs(d.generated_at))}</div>`;
+    c.className=''; c.innerHTML = html;
+  }).catch(e => { c.className=''; c.innerHTML = errorBox('COT-DATEN', e); });
+}
+
+// ─── INSIDER ──────────────────────────────────────────────
+function renderInsider(force=false){
+  const c = document.getElementById('insider-container');
+  loadJson('insider', force).then(d => {
+    const rows = (d.trades||[]).map(t => `<tr>
+      <td>${E(String(t.trade_date||'').substring(0,10))}</td>
+      <td><a class="ticker" href="https://openinsider.com/${encodeURIComponent(t.ticker||'')}" target="_blank" rel="noopener">${E(t.ticker)}</a>${t.cluster?'<span class="tag">CLUSTER</span>':''}</td>
+      <td>${E(t.company)}</td><td>${E(t.insider)}</td><td class="muted">${E(t.title)}</td>
+      <td class="num">${fmtUsd(t.price,2)}</td><td class="num">${fmtInt(t.qty)}</td>
+      <td class="num ${t.delta_own>0?'pos':''}">${t.delta_own==null?'–':(t.delta_own>0?'+':'')+E(t.delta_own)+'%'}</td>
+      <td class="num pos"><strong>${fmtUsd(t.value)}</strong></td>
+      <td class="muted">${E(t.reason)}</td></tr>`).join('');
+    c.className='';
+    c.innerHTML = `<div class="section-head">// INSIDER-KÄUFE (${E(d.count)} · letzte ${E(d.window_days)} Tage)
+        <button class="btn" id="insider-reload">↺ RELOAD</button></div>
+      ${rows ? `<div class="table-wrap"><table class="data"><thead><tr>
+        <th>Trade</th><th>Ticker</th><th>Firma</th><th>Insider</th><th>Rolle</th>
+        <th class="num">Preis</th><th class="num">Stück</th><th class="num">ΔBesitz</th><th class="num">Wert</th><th>Grund</th>
+      </tr></thead><tbody>${rows}</tbody></table></div>` : '<div class="cot-no-signal card">KEINE RELEVANTEN KÄUFE IM ZEITRAUM</div>'}
+      <div class="footer-note">Quelle: <a href="${escHtml(d.source||'https://openinsider.com')}" target="_blank" rel="noopener">OpenInsider</a> · Generiert ${E(fmtTs(d.generated_at))}</div>`;
+    document.getElementById('insider-reload').addEventListener('click', () => renderInsider(true));
+  }).catch(e => { c.className=''; c.innerHTML = errorBox('INSIDER-DATEN', e); });
+}
+
+// ─── RESEARCH ─────────────────────────────────────────────
+function mdInline(s){
+  return escHtml(s)
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g, '$1<a href="$2" target="_blank" rel="noopener">$2</a>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|\W)\*([^*\s][^*]*)\*(?=\W|$)/g, '$1<em>$2</em>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+function renderMarkdown(md){
+  const out = []; let list = null, para = [];
+  const flushP = () => { if (para.length){ out.push('<p>'+mdInline(para.join(' '))+'</p>'); para = []; } };
+  const flushL = () => { if (list){ out.push(`<${list.tag}>${list.items.map(i=>'<li>'+mdInline(i)+'</li>').join('')}</${list.tag}>`); list = null; } };
+  for (const raw of String(md||'').split('\n')){
+    const line = raw.trimEnd();
+    let m;
+    if (!line.trim()){ flushP(); flushL(); continue; }
+    if ((m = line.match(/^(#{1,3})\s+(.*)$/))){ flushP(); flushL(); out.push(`<h${m[1].length}>${mdInline(m[2])}</h${m[1].length}>`); continue; }
+    if (/^(-{3,}|\*{3,})$/.test(line.trim())){ flushP(); flushL(); out.push('<hr>'); continue; }
+    if ((m = line.match(/^\s*[-*+]\s+(.*)$/)) || (m = line.match(/^\s*\d+[.)]\s+(.*)$/))){
+      flushP();
+      const tag = /^\s*\d/.test(line) ? 'ol' : 'ul';
+      if (!list || list.tag!==tag){ flushL(); list = {tag, items:[]}; }
+      list.items.push(m[1]); continue;
+    }
+    if (list && /^\s{2,}/.test(raw)){ list.items[list.items.length-1] += ' '+line.trim(); continue; }
+    flushL(); para.push(line.trim());
+  }
+  flushP(); flushL();
+  return out.join('\n');
+}
+let researchIdx = 0;
+function renderResearch(force=false){
+  const c = document.getElementById('research-container');
+  Promise.all([loadJson('research', force), loadJson('research_history', force).catch(() => [])]).then(([cur, hist]) => {
+    const reports = (Array.isArray(hist) && hist.length) ? hist : [cur];
+    researchIdx = Math.min(researchIdx, reports.length-1);
+    const r = reports[researchIdx];
+    const opts = reports.map((x,i) => `<option value="${i}" ${i===researchIdx?'selected':''}>${E(x.date)}</option>`).join('');
+    c.className='';
+    c.innerHTML = `<div class="section-head">// RESEARCH REPORT
+        <select class="research-select" id="research-pick" aria-label="Report wählen">${opts}</select></div>
+      <div class="card"><div class="md">${renderMarkdown(r.markdown)}</div></div>
+      <div class="footer-note">Generiert ${E(fmtTs(r.generated_at))} · ${E(r.model)}</div>`;
+    document.getElementById('research-pick').addEventListener('change', ev => { researchIdx = +ev.target.value; renderResearch(); });
+  }).catch(e => { c.className=''; c.innerHTML = errorBox('RESEARCH REPORT', e); });
+}
+
+// ─── ÜBERSICHT ────────────────────────────────────────────
+function renderOverview(){
+  const set = (id, html) => { const el = document.getElementById(id); el.className=''; el.innerHTML = html; };
+  loadJson('feargreed').then(d => set('ov-fg',
+    `<div style="display:flex;align-items:center;gap:18px">
+       <div style="width:160px">${gaugeSvg(d.score)}</div>
+       <div><div class="big-num" style="color:${fgColor(d.score)}">${E(d.score)}</div>
+         <div class="fg-rating" style="color:${fgColor(d.score)}">${E(d.rating_de||d.rating)}</div>
+         <div class="muted" style="margin-top:6px">Vortag ${E(d.previous_close)} · Woche ${E(d.one_week_ago)} · Monat ${E(d.one_month_ago)}</div></div>
+     </div>`)).catch(e => set('ov-fg', errorBox('FEAR & GREED', e)));
+
+  loadJson('cot').then(d => set('ov-cot',
+    `<div class="big-num" style="color:${d.signal_count?'var(--green)':'var(--dim)'}">${E(d.signal_count)}</div>
+     <div class="muted">Buy-Signal(e) · Report ${E(d.report_date)}</div>
+     ${(d.buy_signals||[]).map(s => `<div style="margin-top:8px"><span class="pos">🟢 ${E(s.commodity)}</span> → ${E(s.etf)} bis ${E(s.hold_until)}</div>`).join('')}`))
+    .catch(e => set('ov-cot', errorBox('COT', e)));
+
+  loadJson('insider').then(d => set('ov-insider',
+    `<table class="data"><tbody>${(d.trades||[]).slice(0,5).map(t => `<tr>
+       <td class="ticker">${E(t.ticker)}${t.cluster?'<span class="tag">C</span>':''}</td>
+       <td class="muted">${E(t.title)}</td><td class="num pos">${fmtUsd(t.value)}</td></tr>`).join('')
+       || '<tr><td class="muted">Keine relevanten Käufe</td></tr>'}</tbody></table>
+     <div class="muted" style="margin-top:6px">${E(d.count)} Käufe · letzte ${E(d.window_days)} Tage</div>`))
+    .catch(e => set('ov-insider', errorBox('INSIDER', e)));
+
+  loadJson('research').then(d => {
+    const heads = String(d.markdown||'').split('\n').filter(l => /^##\s/.test(l)).map(l => l.replace(/^##\s+/,''));
+    set('ov-research', `<div class="big-num" style="font-size:1.1rem;color:var(--mag)">${E(d.date)}</div>
+      <ul style="margin:8px 0 0 18px;font-size:.72rem">${heads.map(h => `<li>${mdInline(h)}</li>`).join('')}</ul>`);
+  }).catch(e => set('ov-research', errorBox('RESEARCH', e)));
+}
+
+// ─── POSITIONS-RECHNER ────────────────────────────────────
+let calcDirection = 'long';
+function setDirection(dir){
+  calcDirection = dir;
+  document.getElementById('dir-long').classList.toggle('active', dir==='long');
+  document.getElementById('dir-short').classList.toggle('active', dir==='short');
+  calcPositions();
+}
+function calcPositions(){
+  const kapital = parseFloat(document.getElementById('calc-kapital').value);
+  const risiko  = parseFloat(document.getElementById('calc-risiko').value);
+  const entry   = parseFloat(document.getElementById('calc-entry').value);
+  const sl      = parseFloat(document.getElementById('calc-sl').value);
+  const errEl   = document.getElementById('calc-error');
+  const clear = () => ['result-hebel','result-margin','result-pos'].forEach(id => document.getElementById(id).textContent = '—');
+
+  if (isNaN(kapital) || isNaN(risiko) || isNaN(entry) || isNaN(sl)) { errEl.textContent = ''; clear(); return; }
+  if (entry <= 0 || sl <= 0 || kapital <= 0 || risiko <= 0 || risiko > 100) { errEl.textContent = 'Ungültiger Wert — alle Felder müssen > 0 sein'; clear(); return; }
+  if (calcDirection === 'long' && sl >= entry)  { errEl.textContent = 'Long: Stop Loss muss unter Entry liegen'; clear(); return; }
+  if (calcDirection === 'short' && sl <= entry) { errEl.textContent = 'Short: Stop Loss muss über Entry liegen'; clear(); return; }
+
+  errEl.textContent = '';
+  const margin = kapital * risiko / 100;
+  const hebel  = entry / Math.abs(entry - sl);
+  const pos    = margin * hebel;
+  document.getElementById('result-hebel').textContent  = hebel.toFixed(1) + '×';
+  document.getElementById('result-margin').textContent = fmtUsd(margin,2);
+  document.getElementById('result-pos').textContent    = fmtUsd(pos,2);
+}
+
+// ─── CRYPTO TICKER ────────────────────────────────────────
+const COINS = [
+  {id:'bitcoin',  symbol:'BTC'},
+  {id:'ethereum', symbol:'ETH'},
+  {id:'pepe',     symbol:'PEPE'},
+];
+document.getElementById('ticker-bar').innerHTML = COINS.map(c =>
+  `<div class="tick" id="tick-${c.id}"><span class="tick-symbol">$${c.symbol}</span>
+   <span class="tick-price tick-loading">LADEN…</span><span class="tick-change neutral">–</span></div>`).join('');
+
+function formatPrice(p){
+  if (p==null) return '–';
+  if (p >= 1) return fmtUsd(p,2);
+  return '$' + p.toPrecision(4);
+}
+async function fetchTickers(){
+  try{
+    const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${COINS.map(c=>c.id).join(',')}&vs_currencies=usd&include_24hr_change=true`);
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    COINS.forEach(c => {
+      const el = document.getElementById('tick-'+c.id), d = data[c.id] || {};
+      const pr = el.querySelector('.tick-price'), ch = el.querySelector('.tick-change');
+      pr.classList.remove('tick-loading');
+      pr.textContent = formatPrice(d.usd);
+      const v = d.usd_24h_change;
+      if (v!=null){
+        ch.className = 'tick-change ' + (v>0?'up':v<0?'down':'neutral');
+        ch.textContent = (v>0?'+':'') + v.toFixed(2) + '%';
+      }
+    });
+    const n = new Date(), p = v => String(v).padStart(2,'0');
+    document.getElementById('ticker-update').textContent = `LAST UPDATE: ${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`;
+  }catch(e){
+    document.querySelectorAll('.tick-price.tick-loading').forEach(el => { el.classList.remove('tick-loading'); el.textContent = '–'; });
+    document.getElementById('ticker-update').textContent = '⚠ COINGECKO API FEHLER';
+  }
+}
+fetchTickers();
+setInterval(fetchTickers, 60000);
+
+showTab(location.hash.slice(1) || 'overview');
+</script>
+</body>
+</html>
