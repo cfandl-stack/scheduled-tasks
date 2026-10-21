@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-20T10:06:53Z",
+  "generated_at": "2026-10-21T00:37:45Z",
   "as_of": "2026-10-20",
-  "score": 22,
+  "score": 23,
   "rating": "Extreme Fear",
   "rating_de": "Extreme Angst",
   "previous_close": 22,
@@ -13,11 +13,11 @@
       "key": "momentum",
       "name": "Market Momentum",
       "name_de": "Marktmomentum",
-      "score": 17,
+      "score": 18,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 1.9296,
-      "value_label": "S&P 500 vs. 125T-Schnitt: +1.9%",
+      "value": 2.1568,
+      "value_label": "S&P 500 vs. 125T-Schnitt: +2.2%",
       "description_de": "S&P 500 im Vergleich zu seinem gleitenden 125-Tage-Durchschnitt. Deutlich darüber = Gier."
     },
     {
@@ -38,30 +38,30 @@
       "score": 21,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -2.6971,
-      "value_label": "Netto-Aufwärtsvolumen (20T): -2.7%",
+      "value": -2.634,
+      "value_label": "Netto-Aufwärtsvolumen (20T): -2.6%",
       "description_de": "Volumen steigender minus fallender Aktien des Korbs über 20 Tage (Näherung für den McClellan Volume Summation Index)."
     },
     {
       "key": "put_call",
       "name": "Put and Call Options",
       "name_de": "Put/Call-Optionen",
-      "score": 24,
+      "score": 18,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 0.9108,
-      "value_label": "VIX/VIX3M (5T-Ø): 0.91",
+      "value": 0.9231,
+      "value_label": "VIX/VIX3M (5T-Ø): 0.92",
       "description_de": "5-Tage-Schnitt von VIX/VIX3M als Ersatz für die Put/Call-Ratio. Hoher Wert = teure kurzfristige Absicherung = Angst."
     },
     {
       "key": "volatility",
       "name": "Market Volatility",
       "name_de": "Marktvolatilität",
-      "score": 14,
+      "score": 22,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 19.1415,
-      "value_label": "VIX vs. 50T-Schnitt: +19.1%",
+      "value": 10.2506,
+      "value_label": "VIX vs. 50T-Schnitt: +10.3%",
       "description_de": "VIX im Vergleich zu seinem gleitenden 50-Tage-Durchschnitt. Steigende Volatilität = Angst."
     },
     {
@@ -1094,7 +1094,7 @@
     },
     {
       "date": "2026-10-20",
-      "score": 22
+      "score": 23
     }
   ]
 }
