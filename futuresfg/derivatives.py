@@ -301,6 +301,6 @@ def fetch_okx_liquidations(start: date) -> dict[str, dict[str, float]]:
         time.sleep(config.PAGE_PAUSE)
     if not orders:
         raise ValueError("No OKX liquidation orders")
-    # Days starting before the oldest fetched order are incomplete (paging limit or retention).
-    oldest = min(ts for ts, _, _ in orders)
-    return require(_from(bucket_liquidations(orders, oldest), start), "OKX liquidations")
+    # Days starting well before the oldest fetched order are incomplete (paging limit or retention).
+    complete_from = min(ts for ts, _, _ in orders) - config.OKX_LIQ_MAX_GAP_HOURS * 3_600_000
+    return require(_from(bucket_liquidations(orders, complete_from), start), "OKX liquidations")

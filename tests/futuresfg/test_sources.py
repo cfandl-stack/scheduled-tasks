@@ -147,11 +147,11 @@ class TestLiquidations:
             "totalLoss": "0",
             "details": [
                 {"bkLoss": "0", "bkPx": "100000", "ccy": "", "posSide": "long", "side": "sell", "sz": "50",
-                 "ts": str(D1 + H)},
+                 "time": D1 + H, "ts": str(D1 + H)},
                 {"bkLoss": "0", "bkPx": "110000", "ccy": "", "posSide": "short", "side": "buy", "sz": "10",
-                 "ts": str(D1 + 2 * H)},
+                 "time": D1 + 2 * H, "ts": str(D1 + 2 * H)},
                 {"bkLoss": "0", "bkPx": "100000", "ccy": "", "posSide": "net", "side": "sell", "sz": "1",
-                 "ts": str(D1 + 3 * H)},
+                 "time": D1 + 3 * H, "ts": str(D1 + 3 * H)},
             ]}]}
         orders = derivatives.parse_okx_liquidations(payload)
         assert [o[1] for o in orders] == ["long", "short", "long"]
@@ -171,6 +171,26 @@ class TestLiquidations:
         monkeypatch.setattr(http, "get_json", fake_get)
         out = derivatives.fetch_okx_liquidations(date(2025, 10, 1))
         assert list(out) == ["2025-10-20"]
+
+    def test_okx_nearly_complete_previous_day_kept(self, monkeypatch):
+        # Cron 00:20 UTC, started by GitHub around 05:00: OKX's ~24 h retention starts ~5 h into the previous day.
+        now = D1 + DAY + 5 * H + 20 * 60_000
+        stamps = [now - k * H for k in range(24)]  # newest first, oldest 2025-10-19 06:20
+        details = [{"bkLoss": "0", "bkPx": "100000", "ccy": "", "posSide": "long" if k % 4 else "short",
+                    "side": "sell" if k % 4 else "buy", "sz": "1", "time": ts, "ts": str(ts)}
+                   for k, ts in enumerate(stamps)]
+
+        def fake_get(url, params=None, headers=None):
+            if params.get("after"):
+                return {"code": "0", "msg": "", "data": []}
+            return {"code": "0", "msg": "", "data": [{
+                "instFamily": "BTC-USDT", "instId": "BTC-USDT-SWAP", "instType": "SWAP",
+                "totalLoss": "0", "uly": "BTC-USDT", "details": details}]}
+
+        monkeypatch.setattr(http, "get_json", fake_get)
+        out = derivatives.fetch_okx_liquidations(date(2025, 10, 1))
+        assert list(out) == ["2025-10-19", "2025-10-20"]
+        assert out["2025-10-19"]["long"] + out["2025-10-19"]["short"] == pytest.approx(18 * 1000.0)
 
 
 class TestEtf:
