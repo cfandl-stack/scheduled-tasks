@@ -173,9 +173,9 @@ class TestLiquidations:
         assert list(out) == ["2025-10-20"]
 
     def test_okx_nearly_complete_previous_day_kept(self, monkeypatch):
-        # Daily run at 00:20 UTC: OKX's ~24 h retention starts shortly after the previous midnight.
-        now = D1 + DAY + 20 * 60_000
-        stamps = [now - k * H for k in range(24)]  # newest first, oldest 2025-10-19 01:20
+        # Cron 00:20 UTC, started by GitHub around 05:00: OKX's ~24 h retention starts ~5 h into the previous day.
+        now = D1 + DAY + 5 * H + 20 * 60_000
+        stamps = [now - k * H for k in range(24)]  # newest first, oldest 2025-10-19 06:20
         details = [{"bkLoss": "0", "bkPx": "100000", "ccy": "", "posSide": "long" if k % 4 else "short",
                     "side": "sell" if k % 4 else "buy", "sz": "1", "time": ts, "ts": str(ts)}
                    for k, ts in enumerate(stamps)]
@@ -190,7 +190,7 @@ class TestLiquidations:
         monkeypatch.setattr(http, "get_json", fake_get)
         out = derivatives.fetch_okx_liquidations(date(2025, 10, 1))
         assert list(out) == ["2025-10-19", "2025-10-20"]
-        assert out["2025-10-19"]["long"] + out["2025-10-19"]["short"] == pytest.approx(23 * 1000.0)
+        assert out["2025-10-19"]["long"] + out["2025-10-19"]["short"] == pytest.approx(18 * 1000.0)
 
 
 class TestEtf:
