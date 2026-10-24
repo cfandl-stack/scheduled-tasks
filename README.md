@@ -31,7 +31,7 @@ Deployment: `.github/workflows/pages.yml` veröffentlicht `dashboard/` auf GitHu
 
    | Secret | Für | Pflicht |
    |---|---|---|
-   | `OPENROUTER_API_KEY` | Research Report (openrouter.ai → Keys; Guthaben nötig, ca. 0,05–0,10 $ pro Lauf) | ohne Key wird der Report übersprungen |
+   | `OPENROUTER_API_KEY` | Research Report (openrouter.ai → Keys; Guthaben nötig, ca. 0,05–0,10 $ pro Lauf). Das Modell wird im OpenRouter-Preset `finanztools-research` festgelegt (openrouter.ai/settings/presets) | ohne Key wird der Report übersprungen |
    | `COINGLASS_API_KEY` | Futures F&G: Liquidationen + ETF-Flows | optional, ohne Key werden freie Quellen genutzt |
    | `SENDER_EMAIL` | COT-E-Mail (Gmail-Adresse) | ohne wird nur das Dashboard befüllt |
    | `SENDER_PASSWORD` | COT-E-Mail (Gmail **App-Passwort**) | 〃 |

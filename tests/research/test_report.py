@@ -29,7 +29,7 @@ def _resp(content, finish_reason: str = "stop", searches: int = 3) -> dict:
     # Shape of an OpenRouter /chat/completions response with the web search server tool.
     return {
         "id": "gen-1",
-        "model": report.MODEL,
+        "model": "anthropic/claude-haiku-5.5",
         "choices": [{
             "index": 0,
             "finish_reason": finish_reason,
@@ -45,14 +45,15 @@ def _resp(content, finish_reason: str = "stop", searches: int = 3) -> dict:
 class TestGenerateReport:
     def test_returns_report(self):
         send = FakeSender([_resp("# Research Report — 20.10.2026\n\nInhalt")])
-        assert generate_report(send, date(2026, 10, 20)) == "# Research Report — 20.10.2026\n\nInhalt"
+        assert generate_report(send, date(2026, 10, 20)) == (
+            "# Research Report — 20.10.2026\n\nInhalt", "anthropic/claude-haiku-5.5")
         assert len(send.calls) == 1
 
     def test_request_uses_web_search_tool_and_model(self):
         send = FakeSender([_resp("# Report")])
         generate_report(send, date(2026, 10, 20))
         call = send.calls[0]
-        assert call["model"] == report.MODEL
+        assert call["model"] == report.MODEL == "@preset/finanztools-research"
         tool = call["tools"][0]
         assert tool["type"] == "openrouter:web_search"
         assert tool["parameters"]["max_uses"] > 0
@@ -74,7 +75,7 @@ class TestGenerateReport:
 
     def test_truncated_report_is_kept(self):
         send = FakeSender([_resp("# Research Report — x\nTeil", finish_reason="length")])
-        assert generate_report(send) == "# Research Report — x\nTeil"
+        assert generate_report(send)[0] == "# Research Report — x\nTeil"
 
 
 class TestOpenRouterSender:

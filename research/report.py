@@ -11,7 +11,9 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-MODEL = "anthropic/claude-haiku-5.5"
+# The model is chosen in the OpenRouter preset (openrouter.ai/settings/presets),
+# currently anthropic/claude-haiku-5.5.
+MODEL = "@preset/finanztools-research"
 MAX_TOKENS = 16000
 HISTORY_LIMIT = 10
 
@@ -83,7 +85,10 @@ def openrouter_sender(api_key: str) -> Callable[[dict], dict]:
     return send
 
 
-def generate_report(send: Callable[[dict], dict], today: date | None = None, model: str = MODEL) -> str:
+def generate_report(
+    send: Callable[[dict], dict], today: date | None = None, model: str = MODEL
+) -> tuple[str, str]:
+    """Return the report and the model OpenRouter actually used."""
     prompt = build_prompt(today or date.today())
     data = send({
         "model": model,
@@ -100,9 +105,10 @@ def generate_report(send: Callable[[dict], dict], today: date | None = None, mod
     choice = choices[0]
     usage = data.get("usage") or {}
     searches = (usage.get("server_tool_use") or {}).get("web_search_requests")
+    used_model = data.get("model") or model
     logger.info(
-        "finish_reason=%s, searches=%s, tokens in/out=%s/%s, cost=%s",
-        choice.get("finish_reason"), searches,
+        "model=%s, finish_reason=%s, searches=%s, tokens in/out=%s/%s, cost=%s",
+        used_model, choice.get("finish_reason"), searches,
         usage.get("prompt_tokens"), usage.get("completion_tokens"), usage.get("cost"),
     )
     if choice.get("finish_reason") == "length":
@@ -111,7 +117,7 @@ def generate_report(send: Callable[[dict], dict], today: date | None = None, mod
     report = extract_report_text((choice.get("message") or {}).get("content"))
     if not report:
         raise RuntimeError(f"No report text in response (finish_reason={choice.get('finish_reason')})")
-    return report
+    return report, used_model
 
 
 def build_entry(markdown: str, model: str = MODEL, now: datetime | None = None) -> dict:

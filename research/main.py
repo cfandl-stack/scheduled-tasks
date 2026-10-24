@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 def main() -> int:
     try:
         logger.info("Starting research report (model %s)", MODEL)
-        markdown = generate_report(openrouter_sender(os.environ["OPENROUTER_API_KEY"]))
-        entry = build_entry(markdown)
+        markdown, model = generate_report(openrouter_sender(os.environ["OPENROUTER_API_KEY"]))
+        entry = build_entry(markdown, model=model)
         write_outputs(entry)
         logger.info("Wrote report.md and dashboard/data/research*.json (%d chars)", len(markdown))
         return 0
