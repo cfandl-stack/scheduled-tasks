@@ -9,110 +9,106 @@ from research.report import (
     build_entry,
     extract_report_text,
     generate_report,
+    openrouter_sender,
     update_history,
     write_outputs,
 )
 
 
-def _text(t: str) -> SimpleNamespace:
-    return SimpleNamespace(type="text", text=t)
-
-
-def _search() -> SimpleNamespace:
-    return SimpleNamespace(type="server_tool_use", id="srvtoolu_1", name="web_search")
-
-
-def _result() -> SimpleNamespace:
-    return SimpleNamespace(type="web_search_tool_result", tool_use_id="srvtoolu_1", content=[])
-
-
-class FakeClient:
-    def __init__(self, responses: list[SimpleNamespace]):
+class FakeSender:
+    def __init__(self, responses: list[dict]):
         self._responses = list(responses)
         self.calls: list[dict] = []
-        self.beta = SimpleNamespace(messages=SimpleNamespace(create=self._create))
 
-    def _create(self, **kwargs):
-        self.calls.append(kwargs)
+    def __call__(self, payload: dict) -> dict:
+        self.calls.append(payload)
         return self._responses.pop(0)
 
 
-def _resp(stop_reason: str, *content) -> SimpleNamespace:
-    return SimpleNamespace(stop_reason=stop_reason, content=list(content))
+def _resp(content, finish_reason: str = "stop", searches: int = 3) -> dict:
+    # Shape of an OpenRouter /chat/completions response with the web search server tool.
+    return {
+        "id": "gen-1",
+        "model": "anthropic/claude-haiku-5.5",
+        "choices": [{
+            "index": 0,
+            "finish_reason": finish_reason,
+            "message": {"role": "assistant", "content": content, "annotations": [
+                {"type": "url_citation", "url_citation": {"url": "https://example.com", "title": "x"}},
+            ]},
+        }],
+        "usage": {"prompt_tokens": 30000, "completion_tokens": 2000, "cost": 0.03,
+                  "server_tool_use": {"web_search_requests": searches}},
+    }
 
 
 class TestGenerateReport:
-    def test_single_call_end_turn(self):
-        client = FakeClient([_resp("end_turn", _text("Suche..."), _search(), _result(), _text("# Report"))])
-        assert generate_report(client, date(2026, 10, 20)) == "# Report"
-        assert len(client.calls) == 1
+    def test_returns_report(self):
+        send = FakeSender([_resp("# Research Report — 20.10.2026\n\nInhalt")])
+        assert generate_report(send, date(2026, 10, 20)) == (
+            "# Research Report — 20.10.2026\n\nInhalt", "anthropic/claude-haiku-5.5")
+        assert len(send.calls) == 1
 
     def test_request_uses_web_search_tool_and_model(self):
-        client = FakeClient([_resp("end_turn", _text("# Report"))])
-        generate_report(client, date(2026, 10, 20))
-        call = client.calls[0]
-        assert call["model"] == report.MODEL
+        send = FakeSender([_resp("# Report")])
+        generate_report(send, date(2026, 10, 20))
+        call = send.calls[0]
+        assert call["model"] == report.MODEL == "@preset/finanztools-research"
         tool = call["tools"][0]
-        assert tool["name"] == "web_search"
-        assert tool["type"].startswith("web_search_")
+        assert tool["type"] == "openrouter:web_search"
+        assert tool["parameters"]["max_uses"] > 0
         assert "20.10.2026" in call["messages"][0]["content"]
         assert "48 Stunden" in call["messages"][0]["content"]
 
-    def test_pause_turn_resends_assistant_content(self):
-        first = [_text("Ich suche."), _search(), _result()]
-        client = FakeClient([
-            _resp("pause_turn", *first),
-            _resp("end_turn", _search(), _result(), _text("# Fertig")),
-        ])
-        assert generate_report(client) == "# Fertig"
-        assert len(client.calls) == 2
-        msgs = client.calls[1]["messages"]
-        assert [m["role"] for m in msgs] == ["user", "assistant"]
-        assert msgs[1]["content"] == first
-        assert not any(
-            isinstance(b, dict) and b.get("type") == "tool_result"
-            for m in msgs for b in (m["content"] if isinstance(m["content"], list) else [])
-        )
-
-    def test_text_before_pause_is_kept_when_final_has_no_search(self):
-        client = FakeClient([
-            _resp("pause_turn", _search(), _result(), _text("# Teil 1\n")),
-            _resp("end_turn", _text("Teil 2")),
-        ])
-        assert generate_report(client) == "# Teil 1\nTeil 2"
-
-    def test_pause_turn_is_bounded(self):
-        responses = [_resp("pause_turn", _search(), _result())] * (report.MAX_CONTINUATIONS + 1)
-        client = FakeClient(responses)
-        with pytest.raises(RuntimeError, match="paused"):
-            generate_report(client)
-        assert len(client.calls) == report.MAX_CONTINUATIONS + 1
-
-    def test_no_text_raises(self):
-        client = FakeClient([_resp("end_turn", _search(), _result())])
+    def test_empty_content_raises(self):
         with pytest.raises(RuntimeError, match="No report text"):
-            generate_report(client)
+            generate_report(FakeSender([_resp(None)]))
 
-    def test_refusal_raises(self):
-        client = FakeClient([_resp("refusal")])
-        with pytest.raises(RuntimeError, match="refused"):
-            generate_report(client)
+    def test_error_object_raises(self):
+        send = FakeSender([{"error": {"code": 402, "message": "Insufficient credits"}}])
+        with pytest.raises(RuntimeError, match="Insufficient credits"):
+            generate_report(send)
+
+    def test_no_choices_raises(self):
+        with pytest.raises(RuntimeError, match="No choices"):
+            generate_report(FakeSender([{"choices": []}]))
+
+    def test_truncated_report_is_kept(self):
+        send = FakeSender([_resp("# Research Report — x\nTeil", finish_reason="length")])
+        assert generate_report(send)[0] == "# Research Report — x\nTeil"
+
+
+class TestOpenRouterSender:
+    def test_posts_with_bearer_key(self, monkeypatch):
+        seen = {}
+
+        def fake_post(url, json=None, headers=None, timeout=None):
+            seen.update(url=url, json=json, headers=headers)
+            return SimpleNamespace(status_code=200, json=lambda: {"ok": True}, text="")
+
+        monkeypatch.setattr(report.requests, "post", fake_post)
+        assert openrouter_sender("sk-or-test")({"model": "m"}) == {"ok": True}
+        assert seen["url"] == report.API_URL
+        assert seen["headers"]["Authorization"] == "Bearer sk-or-test"
+        assert seen["json"] == {"model": "m"}
+
+    def test_http_error_raises(self, monkeypatch):
+        monkeypatch.setattr(report.requests, "post", lambda *a, **k: SimpleNamespace(
+            status_code=401, text='{"error":{"message":"No auth credentials found"}}'))
+        with pytest.raises(RuntimeError, match="HTTP 401"):
+            openrouter_sender("bad")({})
 
 
 class TestExtractReportText:
-    def test_drops_narration_before_last_search(self):
-        content = [_text("Ich suche zuerst."), _search(), _result(), _text("# A"), _text("\nB")]
-        assert extract_report_text(content) == "# A\nB"
+    def test_drops_narration_before_heading(self):
+        assert extract_report_text("Ich suche zuerst.\n\n# Research Report — x\nA") == "# Research Report — x\nA"
 
-    def test_falls_back_to_all_text(self):
-        content = [_text("# Nur Text"), _search(), _result()]
-        assert extract_report_text(content) == "# Nur Text"
-
-    def test_accepts_dict_blocks(self):
-        assert extract_report_text([{"type": "text", "text": " x "}]) == "x"
+    def test_keeps_text_without_heading(self):
+        assert extract_report_text(" # Anderer Titel ") == "# Anderer Titel"
 
     def test_empty(self):
-        assert extract_report_text([]) == ""
+        assert extract_report_text(None) == ""
+        assert extract_report_text("") == ""
 
 
 class TestHistory:

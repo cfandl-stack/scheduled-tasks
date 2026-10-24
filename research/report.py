@@ -3,24 +3,31 @@ from __future__ import annotations
 import json
 import logging
 import os
+from collections.abc import Callable
 from datetime import UTC, date, datetime
 from typing import Any
 
+import requests
+
 logger = logging.getLogger(__name__)
 
-MODEL = "claude-sonnet-5-5"
+# The model is chosen in the OpenRouter preset (openrouter.ai/settings/presets),
+# currently anthropic/claude-haiku-5.5.
+MODEL = "@preset/finanztools-research"
 MAX_TOKENS = 16000
-MAX_CONTINUATIONS = 5
 HISTORY_LIMIT = 10
 
-WEB_SEARCH_TOOL = {"type": "web_search_20260209", "name": "web_search", "max_uses": 15}
-FALLBACK_BETA = "server-side-fallback-2026-07-01"
+API_URL = "https://openrouter.ai/api/v1/chat/completions"
+REQUEST_TIMEOUT = 600
+# Exa: $0.007 per search incl. 10 results; max_uses caps the searches per report.
+WEB_SEARCH_TOOL = {
+    "type": "openrouter:web_search",
+    "parameters": {"engine": "exa", "max_results": 5, "max_uses": 10, "max_characters": 2000},
+}
 
 REPORT_PATH = "report.md"
 JSON_PATH = "dashboard/data/research.json"
 HISTORY_PATH = "dashboard/data/research_history.json"
-
-_TOOL_BLOCK_TYPES = {"server_tool_use", "web_search_tool_result"}
 
 
 def build_prompt(today: date) -> str:
@@ -56,62 +63,61 @@ Gib bei jedem Punkt die Quelle/den Link an, wenn verfügbar.
 Antworte nach der Recherche ausschließlich mit dem fertigen Markdown-Report, ohne Vorrede."""
 
 
-def _block_type(block: Any) -> str | None:
-    return block.get("type") if isinstance(block, dict) else getattr(block, "type", None)
+def extract_report_text(content: str | None) -> str:
+    """The report starts at its first heading; anything before it is search narration."""
+    text = (content or "").strip()
+    heading = text.find("# Research Report")
+    return text[heading:].strip() if heading > 0 else text
 
 
-def _block_text(block: Any) -> str:
-    return block.get("text", "") if isinstance(block, dict) else getattr(block, "text", "")
-
-
-def extract_report_text(content: list[Any]) -> str:
-    """Join the text blocks that follow the last web search; earlier text is search narration."""
-    last_tool = -1
-    for i, block in enumerate(content):
-        if _block_type(block) in _TOOL_BLOCK_TYPES:
-            last_tool = i
-    texts = [_block_text(b) for b in content[last_tool + 1:] if _block_type(b) == "text"]
-    if not "".join(texts).strip():
-        texts = [_block_text(b) for b in content if _block_type(b) == "text"]
-    return "".join(texts).strip()
-
-
-def generate_report(client: Any, today: date | None = None, model: str = MODEL) -> str:
-    prompt = build_prompt(today or date.today())
-    messages: list[dict] = [{"role": "user", "content": prompt}]
-    turn_content: list[Any] = []
-
-    for attempt in range(MAX_CONTINUATIONS + 1):
-        response = client.beta.messages.create(
-            model=model,
-            max_tokens=MAX_TOKENS,
-            tools=[WEB_SEARCH_TOOL],
-            messages=messages,
-            betas=[FALLBACK_BETA],
-            fallbacks="default",
+def openrouter_sender(api_key: str) -> Callable[[dict], dict]:
+    def send(payload: dict) -> dict:
+        resp = requests.post(
+            API_URL,
+            json=payload,
+            headers={"Authorization": f"Bearer {api_key}", "X-Title": "Finanztools Research"},
+            timeout=REQUEST_TIMEOUT,
         )
-        turn_content.extend(response.content)
-        logger.info("API call %d: stop_reason=%s", attempt + 1, response.stop_reason)
+        if resp.status_code >= 400:
+            raise RuntimeError(f"OpenRouter HTTP {resp.status_code}: {resp.text[:300]}")
+        return resp.json()
 
-        if response.stop_reason != "pause_turn":
-            break
-        # Server-side search loop paused: resend the partial assistant turn so it resumes.
-        messages = [
-            {"role": "user", "content": prompt},
-            {"role": "assistant", "content": list(turn_content)},
-        ]
-    else:
-        raise RuntimeError(f"Turn still paused after {MAX_CONTINUATIONS} continuations")
+    return send
 
-    if response.stop_reason == "refusal":
-        raise RuntimeError("Model refused the request")
-    if response.stop_reason == "max_tokens":
+
+def generate_report(
+    send: Callable[[dict], dict], today: date | None = None, model: str = MODEL
+) -> tuple[str, str]:
+    """Return the report and the model OpenRouter actually used."""
+    prompt = build_prompt(today or date.today())
+    data = send({
+        "model": model,
+        "max_tokens": MAX_TOKENS,
+        "messages": [{"role": "user", "content": prompt}],
+        "tools": [WEB_SEARCH_TOOL],
+    })
+    if data.get("error"):
+        raise RuntimeError(f"OpenRouter error: {str(data['error'])[:300]}")
+    choices = data.get("choices") or []
+    if not choices:
+        raise RuntimeError(f"No choices in response: {str(data)[:300]}")
+
+    choice = choices[0]
+    usage = data.get("usage") or {}
+    searches = (usage.get("server_tool_use") or {}).get("web_search_requests")
+    used_model = data.get("model") or model
+    logger.info(
+        "model=%s, finish_reason=%s, searches=%s, tokens in/out=%s/%s, cost=%s",
+        used_model, choice.get("finish_reason"), searches,
+        usage.get("prompt_tokens"), usage.get("completion_tokens"), usage.get("cost"),
+    )
+    if choice.get("finish_reason") == "length":
         logger.warning("Report hit max_tokens and may be truncated")
 
-    report = extract_report_text(turn_content)
+    report = extract_report_text((choice.get("message") or {}).get("content"))
     if not report:
-        raise RuntimeError(f"No report text in response (stop_reason={response.stop_reason})")
-    return report
+        raise RuntimeError(f"No report text in response (finish_reason={choice.get('finish_reason')})")
+    return report, used_model
 
 
 def build_entry(markdown: str, model: str = MODEL, now: datetime | None = None) -> dict:
