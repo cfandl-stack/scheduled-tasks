@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-10-27T05:17:00Z",
-  "as_of": "2026-10-26",
-  "index": 47,
-  "today": 55,
+  "generated_at": "2026-10-28T05:55:37Z",
+  "as_of": "2026-10-27",
+  "index": 49,
+  "today": 52,
   "rating": "Neutral",
   "rating_de": "Neutral",
-  "previous_day": 45,
-  "one_week_ago": 41,
+  "previous_day": 47,
+  "one_week_ago": 40,
   "one_month_ago": 52,
   "components_scored": 8,
   "groups": [
@@ -17,58 +17,58 @@
         {
           "key": "funding",
           "name_de": "Funding",
-          "score": 93,
-          "value": 0.008919,
-          "value_label": "+0,0089 %",
-          "value_date": "2026-10-26",
+          "score": 98,
+          "value": 0.01,
+          "value_label": "+0,0100 %",
+          "value_date": "2026-10-27",
           "description_de": "Wer zahlt, um long zu sein: Tagesmittel der Perpetual-Funding-Rate (je 8 Stunden). Hohes Funding = gehebelte Longs = Gier.",
           "source": "OKX",
-          "history_days": 106,
+          "history_days": 107,
           "error": null
         },
         {
           "key": "oi_change",
           "name_de": "Open-Interest-Änderung",
-          "score": 95,
-          "value": 4.296433,
-          "value_label": "+4,3 %",
-          "value_date": "2026-10-26",
+          "score": 66,
+          "value": 0.907124,
+          "value_label": "+0,9 %",
+          "value_date": "2026-10-27",
           "description_de": "24-Stunden-Änderung des offenen BTC-Futures-Interesses: frischer Hebel fließt rein (Gier) oder wird abgebaut (Angst).",
           "source": "OKX",
-          "history_days": 186,
+          "history_days": 187,
           "error": null
         },
         {
           "key": "long_short",
           "name_de": "Long/Short",
-          "score": 99,
-          "value": 2.34,
-          "value_label": "2,34",
-          "value_date": "2026-10-26",
+          "score": 90,
+          "value": 1.97,
+          "value_label": "1,97",
+          "value_date": "2026-10-27",
           "description_de": "Verhältnis der Konten mit Long- zu Short-Positionen. Mehr Longs = Gier.",
           "source": "OKX",
-          "history_days": 187,
+          "history_days": 188,
           "error": null
         },
         {
           "key": "liquidations",
           "name_de": "Liquidationen",
           "score": null,
-          "value": 0.477387,
-          "value_label": "4,0 / 3,7 Mio. $",
-          "value_date": "2026-10-26",
+          "value": 0.866771,
+          "value_label": "0,6 / 3,8 Mio. $",
+          "value_date": "2026-10-27",
           "description_de": "Zwangsverkäufe eines UTC-Tages, Longs / Shorts in Mio. $. Werden vor allem Longs liquidiert = Angst, vor allem Shorts = Gier.",
           "source": "OKX",
-          "history_days": 3,
-          "error": "Sammle Historie (3/60 Tage)"
+          "history_days": 4,
+          "error": "Sammle Historie (4/60 Tage)"
         },
         {
           "key": "rsi_vol",
           "name_de": "RSI und Volatilität",
           "score": 63,
-          "value": 41.548939,
-          "value_label": "RSI 42",
-          "value_date": "2026-10-25",
+          "value": 41.488024,
+          "value_label": "RSI 41",
+          "value_date": "2026-10-26",
           "description_de": "Wie überdehnt der Kurs ist: Mittel aus RSI(14) und invertierter 30-Tage-Volatilität. Hoher RSI bei ruhigem Markt = Gier.",
           "source": "Yahoo Finance",
           "history_days": 364,
@@ -95,10 +95,10 @@
         {
           "key": "stablecoins",
           "name_de": "Stablecoin-Zufluss",
-          "score": 10,
-          "value": -0.768196,
-          "value_label": "−0,8 %",
-          "value_date": "2026-10-26",
+          "score": 12,
+          "value": -0.715174,
+          "value_label": "−0,7 %",
+          "value_date": "2026-10-27",
           "description_de": "7-Tage-Änderung der gesamten Stablecoin-Marktkapitalisierung: trockenes Pulver, das in den Markt kommt.",
           "source": "DefiLlama",
           "history_days": 365,
@@ -107,10 +107,10 @@
         {
           "key": "coinbase_premium",
           "name_de": "Coinbase-Premium",
-          "score": 1,
-          "value": -0.17688,
-          "value_label": "−0,177 %",
-          "value_date": "2026-10-26",
+          "score": 10,
+          "value": -0.136275,
+          "value_label": "−0,136 %",
+          "value_date": "2026-10-27",
           "description_de": "Aufschlag von BTC-USD auf Coinbase gegenüber BTC-USDT im Ausland: US-Käufer zahlen mehr = Gier.",
           "source": "Coinbase vs. Binance",
           "history_days": 365,
@@ -119,10 +119,10 @@
         {
           "key": "vix",
           "name_de": "VIX",
-          "score": 33,
-          "value": 18.389999,
-          "value_label": "18,4",
-          "value_date": "2026-10-26",
+          "score": 42,
+          "value": 17.52,
+          "value_label": "17,5",
+          "value_date": "2026-10-27",
           "description_de": "Die Angst der Wall Street. Hoher VIX = Angst (invertiert).",
           "source": "Yahoo Finance",
           "history_days": 253,
@@ -131,10 +131,10 @@
         {
           "key": "dxy",
           "name_de": "DXY-Trend",
-          "score": 43,
-          "value": 101.959999,
-          "value_label": "102,0",
-          "value_date": "2026-10-26",
+          "score": 37,
+          "value": 102.32,
+          "value_label": "102,3",
+          "value_date": "2026-10-27",
           "description_de": "20-Tage-Trend des Dollar-Index: ein starker Dollar entzieht Liquidität (invertiert). Angezeigt ist der Indexstand.",
           "source": "Yahoo Finance (DX-Y.NYB)",
           "history_days": 251,
@@ -1667,7 +1667,7 @@
     {
       "date": "2026-09-18",
       "daily": 58,
-      "index": 51
+      "index": 52
     },
     {
       "date": "2026-09-19",
@@ -1727,7 +1727,7 @@
     {
       "date": "2026-09-30",
       "daily": 48,
-      "index": 49
+      "index": 50
     },
     {
       "date": "2026-10-01",
@@ -1736,7 +1736,7 @@
     },
     {
       "date": "2026-10-02",
-      "daily": 55,
+      "daily": 56,
       "index": 51
     },
     {
@@ -1746,12 +1746,12 @@
     },
     {
       "date": "2026-10-04",
-      "daily": 52,
+      "daily": 53,
       "index": 51
     },
     {
       "date": "2026-10-05",
-      "daily": 50,
+      "daily": 51,
       "index": 50
     },
     {
@@ -1762,7 +1762,7 @@
     {
       "date": "2026-10-07",
       "daily": 55,
-      "index": 53
+      "index": 54
     },
     {
       "date": "2026-10-08",
@@ -1801,7 +1801,7 @@
     },
     {
       "date": "2026-10-15",
-      "daily": 43,
+      "daily": 44,
       "index": 41
     },
     {
@@ -1856,8 +1856,13 @@
     },
     {
       "date": "2026-10-26",
-      "daily": 55,
+      "daily": 54,
       "index": 47
+    },
+    {
+      "date": "2026-10-27",
+      "daily": 52,
+      "index": 49
     }
   ]
 }
