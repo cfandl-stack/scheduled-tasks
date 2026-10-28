@@ -1,55 +1,55 @@
 {
-  "generated_at": "2026-10-27T01:29:08Z",
-  "as_of": "2026-10-26",
-  "score": 17,
+  "generated_at": "2026-10-28T01:21:22Z",
+  "as_of": "2026-10-27",
+  "score": 21,
   "rating": "Extreme Fear",
   "rating_de": "Extreme Angst",
-  "previous_close": 14,
-  "one_week_ago": 22,
+  "previous_close": 17,
+  "one_week_ago": 30,
   "one_month_ago": 53,
-  "one_year_ago": 54,
+  "one_year_ago": 62,
   "components": [
     {
       "key": "momentum",
       "name": "Market Momentum",
       "name_de": "Marktmomentum",
-      "score": 15,
+      "score": 19,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 1.4531,
-      "value_label": "S&P 500 vs. 125T-Schnitt: +1.5%",
+      "value": 1.9955,
+      "value_label": "S&P 500 vs. 125T-Schnitt: +2.0%",
       "description_de": "S&P 500 im Vergleich zu seinem gleitenden 125-Tage-Durchschnitt. Deutlich darüber = Gier."
     },
     {
       "key": "strength",
       "name": "Stock Price Strength",
       "name_de": "Kursstärke",
-      "score": 41,
+      "score": 32,
       "rating": "Fear",
       "rating_de": "Angst",
-      "value": 2.8571,
-      "value_label": "Netto 52W-Hochs: +2.9% des Korbs",
+      "value": 1.9048,
+      "value_label": "Netto 52W-Hochs: +1.9% des Korbs",
       "description_de": "Anteil der ~100 größten US-Aktien auf 52-Wochen-Hoch minus Anteil auf 52-Wochen-Tief (Näherung für NYSE-Hochs/-Tiefs)."
     },
     {
       "key": "breadth",
       "name": "Stock Price Breadth",
       "name_de": "Marktbreite",
-      "score": 26,
+      "score": 33,
       "rating": "Fear",
       "rating_de": "Angst",
-      "value": -1.8456,
-      "value_label": "Netto-Aufwärtsvolumen (20T): -1.8%",
+      "value": -0.3999,
+      "value_label": "Netto-Aufwärtsvolumen (20T): -0.4%",
       "description_de": "Volumen steigender minus fallender Aktien des Korbs über 20 Tage (Näherung für den McClellan Volume Summation Index)."
     },
     {
       "key": "put_call",
       "name": "Put and Call Options",
       "name_de": "Put/Call-Optionen",
-      "score": 16,
+      "score": 20,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 0.9241,
+      "value": 0.9208,
       "value_label": "VIX/VIX3M (5T-Ø): 0.92",
       "description_de": "5-Tage-Schnitt von VIX/VIX3M als Ersatz für die Put/Call-Ratio. Hoher Wert = teure kurzfristige Absicherung = Angst."
     },
@@ -57,22 +57,22 @@
       "key": "volatility",
       "name": "Market Volatility",
       "name_de": "Marktvolatilität",
-      "score": 18,
-      "rating": "Extreme Fear",
-      "rating_de": "Extreme Angst",
-      "value": 14.9432,
-      "value_label": "VIX vs. 50T-Schnitt: +14.9%",
+      "score": 26,
+      "rating": "Fear",
+      "rating_de": "Angst",
+      "value": 9.276,
+      "value_label": "VIX vs. 50T-Schnitt: +9.3%",
       "description_de": "VIX im Vergleich zu seinem gleitenden 50-Tage-Durchschnitt. Steigende Volatilität = Angst."
     },
     {
       "key": "safe_haven",
       "name": "Safe Haven Demand",
       "name_de": "Nachfrage nach sicheren Häfen",
-      "score": 4,
+      "score": 13,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -2.991,
-      "value_label": "SPY − IEF (20T): -3.0 Pp",
+      "value": -2.1583,
+      "value_label": "SPY − IEF (20T): -2.2 Pp",
       "description_de": "20-Tage-Rendite von Aktien (SPY) minus Staatsanleihen (IEF). Anleihen vorne = Flucht in Sicherheit = Angst."
     },
     {
@@ -82,16 +82,12 @@
       "score": 1,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -2.1157,
+      "value": -2.1225,
       "value_label": "HYG − IEF (20T): -2.1 Pp",
       "description_de": "20-Tage-Rendite von Hochzinsanleihen (HYG) minus Staatsanleihen (IEF) als Näherung für den Renditeaufschlag. Junk Bonds vorne = Gier."
     }
   ],
   "history": [
-    {
-      "date": "2025-10-28",
-      "score": 59
-    },
     {
       "date": "2025-10-29",
       "score": 58
@@ -1095,6 +1091,10 @@
     {
       "date": "2026-10-26",
       "score": 17
+    },
+    {
+      "date": "2026-10-27",
+      "score": 21
     }
   ]
 }
