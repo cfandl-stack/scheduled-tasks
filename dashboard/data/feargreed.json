@@ -1,97 +1,93 @@
 {
-  "generated_at": "2026-10-29T01:47:52Z",
-  "as_of": "2026-10-28",
-  "score": 24,
-  "rating": "Extreme Fear",
-  "rating_de": "Extreme Angst",
-  "previous_close": 20,
-  "one_week_ago": 28,
-  "one_month_ago": 44,
-  "one_year_ago": 59,
+  "generated_at": "2026-10-30T01:57:51Z",
+  "as_of": "2026-10-29",
+  "score": 34,
+  "rating": "Fear",
+  "rating_de": "Angst",
+  "previous_close": 24,
+  "one_week_ago": 26,
+  "one_month_ago": 37,
+  "one_year_ago": 58,
   "components": [
     {
       "key": "momentum",
       "name": "Market Momentum",
       "name_de": "Marktmomentum",
-      "score": 20,
+      "score": 18,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 2.2201,
-      "value_label": "S&P 500 vs. 125T-Schnitt: +2.2%",
+      "value": 1.856,
+      "value_label": "S&P 500 vs. 125T-Schnitt: +1.9%",
       "description_de": "S&P 500 im Vergleich zu seinem gleitenden 125-Tage-Durchschnitt. Deutlich darüber = Gier."
     },
     {
       "key": "strength",
       "name": "Stock Price Strength",
       "name_de": "Kursstärke",
-      "score": 15,
-      "rating": "Extreme Fear",
-      "rating_de": "Extreme Angst",
-      "value": 0.0,
-      "value_label": "Netto 52W-Hochs: +0.0% des Korbs",
+      "score": 86,
+      "rating": "Extreme Greed",
+      "rating_de": "Extreme Gier",
+      "value": 9.5238,
+      "value_label": "Netto 52W-Hochs: +9.5% des Korbs",
       "description_de": "Anteil der ~100 größten US-Aktien auf 52-Wochen-Hoch minus Anteil auf 52-Wochen-Tief (Näherung für NYSE-Hochs/-Tiefs)."
     },
     {
       "key": "breadth",
       "name": "Stock Price Breadth",
       "name_de": "Marktbreite",
-      "score": 44,
-      "rating": "Fear",
-      "rating_de": "Angst",
-      "value": 1.3474,
-      "value_label": "Netto-Aufwärtsvolumen (20T): +1.3%",
+      "score": 51,
+      "rating": "Neutral",
+      "rating_de": "Neutral",
+      "value": 2.0407,
+      "value_label": "Netto-Aufwärtsvolumen (20T): +2.0%",
       "description_de": "Volumen steigender minus fallender Aktien des Korbs über 20 Tage (Näherung für den McClellan Volume Summation Index)."
     },
     {
       "key": "put_call",
       "name": "Put and Call Options",
       "name_de": "Put/Call-Optionen",
-      "score": 21,
-      "rating": "Extreme Fear",
-      "rating_de": "Extreme Angst",
-      "value": 0.9186,
-      "value_label": "VIX/VIX3M (5T-Ø): 0.92",
+      "score": 26,
+      "rating": "Fear",
+      "rating_de": "Angst",
+      "value": 0.907,
+      "value_label": "VIX/VIX3M (5T-Ø): 0.91",
       "description_de": "5-Tage-Schnitt von VIX/VIX3M als Ersatz für die Put/Call-Ratio. Hoher Wert = teure kurzfristige Absicherung = Angst."
     },
     {
       "key": "volatility",
       "name": "Market Volatility",
       "name_de": "Marktvolatilität",
-      "score": 33,
+      "score": 30,
       "rating": "Fear",
       "rating_de": "Angst",
-      "value": 5.2062,
-      "value_label": "VIX vs. 50T-Schnitt: +5.2%",
+      "value": 6.8522,
+      "value_label": "VIX vs. 50T-Schnitt: +6.9%",
       "description_de": "VIX im Vergleich zu seinem gleitenden 50-Tage-Durchschnitt. Steigende Volatilität = Angst."
     },
     {
       "key": "safe_haven",
       "name": "Safe Haven Demand",
       "name_de": "Nachfrage nach sicheren Häfen",
-      "score": 24,
+      "score": 19,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -0.8059,
-      "value_label": "SPY − IEF (20T): -0.8 Pp",
+      "value": -1.4808,
+      "value_label": "SPY − IEF (20T): -1.5 Pp",
       "description_de": "20-Tage-Rendite von Aktien (SPY) minus Staatsanleihen (IEF). Anleihen vorne = Flucht in Sicherheit = Angst."
     },
     {
       "key": "junk_bond",
       "name": "Junk Bond Demand",
       "name_de": "Nachfrage nach Hochzinsanleihen",
-      "score": 9,
+      "score": 8,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -1.1359,
-      "value_label": "HYG − IEF (20T): -1.1 Pp",
+      "value": -1.2994,
+      "value_label": "HYG − IEF (20T): -1.3 Pp",
       "description_de": "20-Tage-Rendite von Hochzinsanleihen (HYG) minus Staatsanleihen (IEF) als Näherung für den Renditeaufschlag. Junk Bonds vorne = Gier."
     }
   ],
   "history": [
-    {
-      "date": "2025-10-30",
-      "score": 51
-    },
     {
       "date": "2025-10-31",
       "score": 49
@@ -1095,6 +1091,10 @@
     {
       "date": "2026-10-28",
       "score": 24
+    },
+    {
+      "date": "2026-10-29",
+      "score": 34
     }
   ]
 }
