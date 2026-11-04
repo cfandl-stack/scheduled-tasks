@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-11-03T03:28:28Z",
-  "as_of": "2026-11-02",
-  "score": 19,
+  "generated_at": "2026-11-04T02:20:32Z",
+  "as_of": "2026-11-03",
+  "score": 17,
   "rating": "Extreme Fear",
   "rating_de": "Extreme Angst",
-  "previous_close": 23,
-  "one_week_ago": 17,
-  "one_month_ago": 36,
-  "one_year_ago": 49,
+  "previous_close": 19,
+  "one_week_ago": 20,
+  "one_month_ago": 35,
+  "one_year_ago": 50,
   "components": [
     {
       "key": "momentum",
       "name": "Market Momentum",
       "name_de": "Marktmomentum",
-      "score": 8,
+      "score": 9,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -0.5748,
-      "value_label": "S&P 500 vs. 125T-Schnitt: -0.6%",
+      "value": -0.2335,
+      "value_label": "S&P 500 vs. 125T-Schnitt: -0.2%",
       "description_de": "S&P 500 im Vergleich zu seinem gleitenden 125-Tage-Durchschnitt. Deutlich darüber = Gier."
     },
     {
@@ -35,33 +35,33 @@
       "key": "breadth",
       "name": "Stock Price Breadth",
       "name_de": "Marktbreite",
-      "score": 18,
+      "score": 11,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -3.5399,
-      "value_label": "Netto-Aufwärtsvolumen (20T): -3.5%",
+      "value": -5.3102,
+      "value_label": "Netto-Aufwärtsvolumen (20T): -5.3%",
       "description_de": "Volumen steigender minus fallender Aktien des Korbs über 20 Tage (Näherung für den McClellan Volume Summation Index)."
     },
     {
       "key": "put_call",
       "name": "Put and Call Options",
       "name_de": "Put/Call-Optionen",
-      "score": 23,
+      "score": 14,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 0.9154,
-      "value_label": "VIX/VIX3M (5T-Ø): 0.92",
+      "value": 0.9322,
+      "value_label": "VIX/VIX3M (5T-Ø): 0.93",
       "description_de": "5-Tage-Schnitt von VIX/VIX3M als Ersatz für die Put/Call-Ratio. Hoher Wert = teure kurzfristige Absicherung = Angst."
     },
     {
       "key": "volatility",
       "name": "Market Volatility",
       "name_de": "Marktvolatilität",
-      "score": 7,
+      "score": 10,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 29.8438,
-      "value_label": "VIX vs. 50T-Schnitt: +29.8%",
+      "value": 27.0401,
+      "value_label": "VIX vs. 50T-Schnitt: +27.0%",
       "description_de": "VIX im Vergleich zu seinem gleitenden 50-Tage-Durchschnitt. Steigende Volatilität = Angst."
     },
     {
@@ -88,10 +88,6 @@
     }
   ],
   "history": [
-    {
-      "date": "2025-11-04",
-      "score": 35
-    },
     {
       "date": "2025-11-05",
       "score": 46
@@ -1010,7 +1006,7 @@
     },
     {
       "date": "2026-10-02",
-      "score": 36
+      "score": 35
     },
     {
       "date": "2026-10-05",
@@ -1018,15 +1014,15 @@
     },
     {
       "date": "2026-10-06",
-      "score": 51
+      "score": 50
     },
     {
       "date": "2026-10-07",
-      "score": 46
+      "score": 45
     },
     {
       "date": "2026-10-08",
-      "score": 43
+      "score": 42
     },
     {
       "date": "2026-10-09",
@@ -1050,19 +1046,19 @@
     },
     {
       "date": "2026-10-16",
-      "score": 32
+      "score": 33
     },
     {
       "date": "2026-10-19",
-      "score": 22
+      "score": 23
     },
     {
       "date": "2026-10-20",
-      "score": 30
+      "score": 31
     },
     {
       "date": "2026-10-21",
-      "score": 28
+      "score": 29
     },
     {
       "date": "2026-10-22",
@@ -1070,11 +1066,11 @@
     },
     {
       "date": "2026-10-23",
-      "score": 14
+      "score": 15
     },
     {
       "date": "2026-10-26",
-      "score": 17
+      "score": 18
     },
     {
       "date": "2026-10-27",
@@ -1095,6 +1091,10 @@
     {
       "date": "2026-11-02",
       "score": 19
+    },
+    {
+      "date": "2026-11-03",
+      "score": 17
     }
   ]
 }
