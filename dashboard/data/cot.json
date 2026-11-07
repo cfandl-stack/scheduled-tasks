@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-31T00:17:09Z",
-  "report_date": "2026-10-31",
+  "generated_at": "2026-11-07T00:32:43Z",
+  "report_date": "2026-11-07",
   "signal_count": 0,
   "buy_signals": [],
   "full_status": [
@@ -19,7 +19,7 @@
     {
       "commodity": "Crude Oil (WTI)",
       "commercial_signal": false,
-      "trend_signal": true,
+      "trend_signal": false,
       "combined": false
     },
     {
