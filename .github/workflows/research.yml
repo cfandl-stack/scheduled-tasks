@@ -2,8 +2,8 @@ name: Research Report
 
 on:
   schedule:
-    # Every 48h at 06:17 UTC (odd days of the month)
-    - cron: '17 6 */2 * *'
+    # Montag 08:00 UTC, nach Insider (Mo 07:00) und COT (Fr) – Wochenausblick
+    - cron: '0 8 * * 1'
   workflow_dispatch:
 
 permissions:
