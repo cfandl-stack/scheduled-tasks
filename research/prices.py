@@ -3,13 +3,30 @@ from __future__ import annotations
 
 import logging
 import math
+import tempfile
 from datetime import date
 
 import pandas as pd
+import yfinance as yf
 
 from feargreed.data import download, extract_field
 
 logger = logging.getLogger(__name__)
+
+_cache_ready = False
+
+
+def _use_private_cache() -> None:
+    """yfinance keeps a shared SQLite timezone cache; parallel downloads can hit 'database is locked'.
+    A fresh per-run folder avoids clashes with leftovers on the runner."""
+    global _cache_ready
+    if _cache_ready:
+        return
+    try:
+        yf.set_tz_cache_location(tempfile.mkdtemp(prefix="yf-cache-"))
+    except Exception:
+        logger.warning("Could not set yfinance cache location", exc_info=True)
+    _cache_ready = True
 
 # Anzeigename -> Yahoo-Finance-Symbol
 MARKETS: dict[str, str] = {
@@ -30,17 +47,32 @@ PERIOD = "1y"
 FIELDS = ("High", "Low", "Close")
 
 
-def fetch_history(symbols: list[str], period: str = PERIOD) -> dict[str, pd.DataFrame]:
-    """Daily High/Low/Close per symbol; symbols without data are left out."""
+def fetch_history(symbols: list[str], period: str = PERIOD, retry: bool = True) -> dict[str, pd.DataFrame]:
+    """Daily High/Low/Close per symbol; symbols without data are left out (one retry for missing ones)."""
     symbols = list(dict.fromkeys(s for s in symbols if s))
     if not symbols:
         return {}
+    _use_private_cache()
+    out = _fetch(symbols, period)
+    missing = [s for s in symbols if s not in out]
+    if retry and missing:
+        logger.info("Retrying %d symbols without data: %s", len(missing), ", ".join(missing))
+        try:
+            out.update(_fetch(missing, period))
+        except Exception:
+            logger.warning("Retry failed for %s", ", ".join(missing), exc_info=True)
+    for s in symbols:
+        if s not in out:
+            logger.warning("No price data for %s", s)
+    return out
+
+
+def _fetch(symbols: list[str], period: str) -> dict[str, pd.DataFrame]:
     df = download(symbols, period=period)
     fields = {f: extract_field(df, f, symbols) for f in FIELDS}
     out: dict[str, pd.DataFrame] = {}
     for s in symbols:
         if s not in fields["Close"].columns:
-            logger.warning("No price data for %s", s)
             continue
         frame = pd.DataFrame({f: fields[f][s] if s in fields[f].columns else float("nan") for f in FIELDS})
         frame = frame.dropna(subset=["Close"])

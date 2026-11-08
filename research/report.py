@@ -15,7 +15,7 @@ from insider.filters import insider_role
 logger = logging.getLogger(__name__)
 
 # The model is chosen in the OpenRouter preset (openrouter.ai/settings/presets),
-# currently anthropic/claude-haiku-5.5.
+# currently google/gemini-4-argon (no :batch variant: it does not work on chat/completions).
 MODEL = "@preset/finanztools-research"
 MAX_TOKENS = 16000
 HISTORY_LIMIT = 10
