@@ -54,6 +54,7 @@ class Trade:
     new_position: bool = False
     cluster: bool = False
     officer: bool = False
+    role: str = "other"
     reason: str = ""
 
 

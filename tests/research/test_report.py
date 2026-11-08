@@ -131,6 +131,7 @@ class TestOutputs:
             "date": "2026-10-20",
             "model": "m",
             "markdown": "# R",
+            "ideas": [],
         }
 
     def test_write_outputs(self, tmp_path):
