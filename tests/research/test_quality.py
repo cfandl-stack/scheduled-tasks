@@ -120,3 +120,30 @@ class TestContextQuality:
         prompt = report.build_prompt(date(2026, 11, 9), "ctx")
         for phrase in ("CRV", "ATR14", "konträr", "Rückblick Vorwoche", '"ideas"', "keine Idee"):
             assert phrase in prompt
+
+
+class TestFetchRetry:
+    def test_missing_symbols_are_retried_once(self, monkeypatch):
+        calls = []
+
+        def fake_fetch(symbols, period):
+            calls.append(list(symbols))
+            if len(calls) == 1:
+                return {"^GSPC": _frame([1.0, 2.0])}
+            return {"RAPP": _frame([3.0, 4.0])}
+
+        monkeypatch.setattr(prices, "_fetch", fake_fetch)
+        monkeypatch.setattr(prices, "_cache_ready", True)
+        out = prices.fetch_history(["^GSPC", "RAPP", "NONE"])
+        assert set(out) == {"^GSPC", "RAPP"}
+        assert calls == [["^GSPC", "RAPP", "NONE"], ["RAPP", "NONE"]]
+
+    def test_retry_failure_keeps_first_result(self, monkeypatch):
+        def fake_fetch(symbols, period):
+            if len(symbols) == 2:
+                return {"A": _frame([1.0])}
+            raise RuntimeError("yahoo down")
+
+        monkeypatch.setattr(prices, "_fetch", fake_fetch)
+        monkeypatch.setattr(prices, "_cache_ready", True)
+        assert set(prices.fetch_history(["A", "B"])) == {"A"}
