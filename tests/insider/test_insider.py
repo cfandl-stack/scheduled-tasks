@@ -7,7 +7,7 @@ import requests
 
 from insider import main as insider_main
 from insider.config import screener_url
-from insider.filters import apply_filters, is_officer, mark_clusters
+from insider.filters import apply_filters, insider_role, is_officer, mark_clusters
 from insider.json_output import build_insider_json, write_insider_json
 from insider.scraper import FetchError, clean_number, fetch_screener_html, parse_screener_html
 
@@ -83,10 +83,18 @@ class TestFilters:
     def test_officer_roles(self):
         assert is_officer("CEO")
         assert is_officer("Pres, COO")
-        assert is_officer("10%")
+        assert not is_officer("10%")
         assert is_officer("Dir")
+        assert is_officer("Dir, 10%")
         assert not is_officer("VP Sales")
         assert not is_officer("Director of Ops")
+
+    def test_insider_role(self):
+        assert insider_role("CEO, 10%") == "management"
+        assert insider_role("Dir, 10%") == "director"
+        assert insider_role("10%") == "owner"
+        assert insider_role("VP Sales") == "other"
+        assert insider_role("") == "other"
 
     def test_cluster_detection(self, trades):
         assert mark_clusters(trades) == {"ACME"}

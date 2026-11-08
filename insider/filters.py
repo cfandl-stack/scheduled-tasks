@@ -6,20 +6,41 @@ from collections import defaultdict
 from insider.config import (
     CLUSTER_MIN_INSIDERS,
     MIN_DELTA_OWN_PCT,
+    DIRECTOR_ROLES,
+    MANAGEMENT_ROLES,
     MIN_VALUE_USD,
-    OFFICER_ROLES,
+    OWNER_ROLES,
 )
 from insider.scraper import Trade
 
-_ROLE_PATTERNS = [re.compile(rf"(?<![A-Za-z]){re.escape(r)}(?![A-Za-z])", re.IGNORECASE) for r in OFFICER_ROLES]
+
+
+def _patterns(roles: tuple[str, ...]) -> list[re.Pattern]:
+    return [re.compile(rf"(?<![A-Za-z]){re.escape(r)}(?![A-Za-z])", re.IGNORECASE) for r in roles]
+
+
+_ROLE_PATTERNS = {
+    "management": _patterns(MANAGEMENT_ROLES),
+    "director": _patterns(DIRECTOR_ROLES),
+    "owner": _patterns(OWNER_ROLES),
+}
 
 
 def is_purchase(trade: Trade) -> bool:
     return trade.trade_type.strip().upper().startswith("P")
 
 
+def insider_role(title: str) -> str:
+    """Highest-ranked role in the title: management > director > owner (10% holder) > other."""
+    for role, patterns in _ROLE_PATTERNS.items():
+        if any(p.search(title or "") for p in patterns):
+            return role
+    return "other"
+
+
 def is_officer(title: str) -> bool:
-    return any(p.search(title or "") for p in _ROLE_PATTERNS)
+    """Company insider (management or board); pure 10% holders are not."""
+    return insider_role(title) in ("management", "director")
 
 
 def mark_clusters(trades: list[Trade], min_insiders: int = CLUSTER_MIN_INSIDERS) -> set[str]:
@@ -54,7 +75,8 @@ def apply_filters(trades: list[Trade]) -> list[Trade]:
 
     kept: list[Trade] = []
     for t in purchases:
-        t.officer = is_officer(t.title)
+        t.role = insider_role(t.title)
+        t.officer = t.role in ("management", "director")
         reason = materiality_reason(t)
         if t.cluster:
             n = len({p.insider.strip().lower() for p in purchases if p.ticker == t.ticker})

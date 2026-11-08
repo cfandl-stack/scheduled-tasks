@@ -9,7 +9,11 @@ MIN_VALUE_USD = 100_000
 MIN_DELTA_OWN_PCT = 10.0
 CLUSTER_MIN_INSIDERS = 2
 
-OFFICER_ROLES = ("CEO", "CFO", "COO", "Pres", "Dir", "10%")
+# Unternehmensinsider (Management + Board). Reine 10%-Großaktionäre (Fonds, Versicherer) zählen nicht dazu.
+MANAGEMENT_ROLES = ("CEO", "CFO", "COO", "Pres", "Chairman", "Chair", "COB", "GC")
+DIRECTOR_ROLES = ("Dir",)
+OWNER_ROLES = ("10%",)
+OFFICER_ROLES = MANAGEMENT_ROLES + DIRECTOR_ROLES
 
 OUTPUT_PATH = "dashboard/data/insider.json"
 

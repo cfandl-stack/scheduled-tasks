@@ -9,7 +9,7 @@ from insider.scraper import Trade
 
 TRADE_FIELDS = (
     "filing_date", "trade_date", "ticker", "company", "insider", "title", "trade_type",
-    "price", "qty", "owned", "delta_own", "value", "cluster", "officer", "reason",
+    "price", "qty", "owned", "delta_own", "value", "cluster", "officer", "role", "reason",
 )
 
 
