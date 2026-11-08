@@ -8,7 +8,7 @@ Alle Finanz-Tools in einem Repo. Jedes Tool läuft als GitHub Action, schreibt s
 | **Aktienmarkt Fear & Greed** (Nachbau der CNN-Methodik) | `feargreed/` | Mo–Fr 22:15 | `dashboard/data/feargreed.json` |
 | **COT-Signale** (CFTC Commitment of Traders) | `cot/` | Fr 21:00 | `dashboard/data/cot.json` + E-Mail |
 | **Insider-Screener** (OpenInsider-Käufe) | `insider/` | Mo 07:00 | `dashboard/data/insider.json` |
-| **Research Report** (LLM über OpenRouter + Websuche) | `research/` | alle 48 h, 06:17 | `dashboard/data/research*.json` + GitHub Issue |
+| **Research Report** (LLM über OpenRouter + Websuche; Marktlage und Trade-Ideen aus Fear & Greed, Futures F&G, COT und Insider plus Aktien-/Krypto-News) | `research/` | alle 48 h, 06:17 | `dashboard/data/research*.json` + GitHub Issue |
 | **Positions-Rechner** | nur im Dashboard | – | – |
 
 ## Dashboard

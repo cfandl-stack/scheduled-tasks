@@ -160,3 +160,57 @@ class TestOutputs:
             history_path=str(history_path),
         )
         assert len(json.loads(history_path.read_text())) == 1
+
+
+class TestMarketContext:
+    def _write(self, tmp_path, name, data):
+        (tmp_path / f"{name}.json").write_text(json.dumps(data), encoding="utf-8")
+
+    def test_summarises_all_sources(self, tmp_path):
+        self._write(tmp_path, "feargreed", {
+            "as_of": "2026-11-06", "score": 5, "rating_de": "Extreme Angst", "previous_close": 4,
+            "one_week_ago": 27, "one_month_ago": 38, "one_year_ago": 35,
+            "components": [{"name_de": "Momentum", "score": 3, "rating_de": "Extreme Angst", "value_label": "-4 %"},
+                           {"name_de": "Kaputt", "score": None}],
+        })
+        self._write(tmp_path, "futuresfg", {
+            "as_of": "2026-11-07", "index": 45, "rating_de": "Neutral", "today": 33,
+            "groups": [{"name_de": "Derivate", "components": [{"name_de": "Funding", "score": 60, "value_label": "0.01 %"}]}],
+        })
+        self._write(tmp_path, "cot", {
+            "report_date": "2026-11-07",
+            "buy_signals": [{"commodity": "Gold", "etf": "UGL", "hold_until": "2026-12-05",
+                             "trend": {"latest_close": 90.1, "sma50": 85, "sma200": 80}}],
+            "full_status": [{"commodity": "Gold", "commercial_signal": True, "trend_signal": True}],
+        })
+        self._write(tmp_path, "insider", {
+            "generated_at": "2026-11-02T16:42:26Z", "window_days": 14,
+            "trades": [
+                {"ticker": "SMALL", "value": 50_000, "cluster": False},
+                {"ticker": "BIG", "company": "Big Corp", "insider": "Jane", "title": "CEO",
+                 "value": 2_500_000, "trade_date": "2026-10-30", "price": 12.5, "delta_own": 8, "cluster": True},
+            ],
+        })
+        ctx = report.build_market_context(str(tmp_path))
+        assert "Aktien Fear & Greed" in ctx and "5 = Extreme Angst" in ctx
+        assert "Momentum: Score 3" in ctx and "Kaputt" not in ctx
+        assert "7-Tage-Mittel 45" in ctx and "Funding: Score 60" in ctx
+        assert "KAUFSIGNAL Gold via UGL" in ctx
+        assert "Cluster-Käufe bei: BIG" in ctx
+        assert ctx.index("BIG (Big Corp)") < ctx.index("SMALL")
+        assert "$2.5M" in ctx
+
+    def test_missing_and_broken_files_are_skipped(self, tmp_path):
+        (tmp_path / "cot.json").write_text("{kaputt", encoding="utf-8")
+        assert report.build_market_context(str(tmp_path)) == ""
+
+    def test_context_goes_into_prompt(self):
+        send = FakeSender([_resp("# Report")])
+        generate_report(send, date(2026, 10, 20), context="Aktien Fear & Greed: 5")
+        prompt = send.calls[0]["messages"][0]["content"]
+        assert "Aktien Fear & Greed: 5" in prompt
+        assert "Trade-Ideen" in prompt and "keine Anlageberatung" in prompt
+        assert "OpenClaw" not in prompt
+
+    def test_empty_context_has_placeholder(self):
+        assert "Keine eigenen Auswertungen" in report.build_prompt(date(2026, 10, 20), "")

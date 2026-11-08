@@ -28,38 +28,140 @@ WEB_SEARCH_TOOL = {
 REPORT_PATH = "report.md"
 JSON_PATH = "dashboard/data/research.json"
 HISTORY_PATH = "dashboard/data/research_history.json"
+DATA_DIR = "dashboard/data"
+INSIDER_TOP = 12
 
 
-def build_prompt(today: date) -> str:
+def _read_json(path: str) -> Any:
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        logger.warning("Market data %s not usable: %s", path, e)
+        return None
+
+
+def _fmt_usd(v: Any) -> str:
+    try:
+        n = float(v)
+    except (TypeError, ValueError):
+        return "–"
+    if n >= 1_000_000:
+        return f"${n / 1_000_000:.1f}M"
+    if n >= 1_000:
+        return f"${n / 1_000:.0f}K"
+    return f"${n:.0f}"
+
+
+def _fg_section(d: dict) -> list[str]:
+    lines = [
+        f"Aktien Fear & Greed (CNN-Methodik, Stand {d.get('as_of')}): {d.get('score')} = {d.get('rating_de') or d.get('rating')}"
+        f" | Vortag {d.get('previous_close')}, vor 1 Woche {d.get('one_week_ago')},"
+        f" vor 1 Monat {d.get('one_month_ago')}, vor 1 Jahr {d.get('one_year_ago')}",
+    ]
+    for k in d.get("components") or []:
+        if k.get("score") is not None:
+            lines.append(f"  - {k.get('name_de') or k.get('name')}: Score {k.get('score')}"
+                         f" ({k.get('rating_de') or k.get('rating')}), {k.get('value_label')}")
+    return lines
+
+
+def _futures_section(d: dict) -> list[str]:
+    lines = [
+        f"Bitcoin Futures Fear & Greed (Stand {d.get('as_of')}): 7-Tage-Mittel {d.get('index')} = {d.get('rating_de') or d.get('rating')}"
+        f" | Tageswert {d.get('today')}, Vortag {d.get('previous_day')}, vor 1 Woche {d.get('one_week_ago')},"
+        f" vor 1 Monat {d.get('one_month_ago')}",
+    ]
+    for g in d.get("groups") or []:
+        for k in g.get("components") or []:
+            if k.get("score") is not None:
+                lines.append(f"  - {g.get('name_de')} / {k.get('name_de')}: Score {k.get('score')}, {k.get('value_label')}")
+    return lines
+
+
+def _cot_section(d: dict) -> list[str]:
+    lines = [f"COT-Report (CFTC, Stand {d.get('report_date')}), Regel: Commercials Long auf 52W-Hoch + Kurs > SMA50 > SMA200:"]
+    for s in d.get("buy_signals") or []:
+        tr = s.get("trend") or {}
+        lines.append(f"  - KAUFSIGNAL {s.get('commodity')} via {s.get('etf')} (2x ETF), halten bis {s.get('hold_until')},"
+                     f" Kurs {tr.get('latest_close')}, SMA50 {tr.get('sma50')}, SMA200 {tr.get('sma200')}")
+    for s in d.get("full_status") or []:
+        lines.append(f"  - {s.get('commodity')}: Commercials-Signal {'ja' if s.get('commercial_signal') else 'nein'},"
+                     f" Trend-Signal {'ja' if s.get('trend_signal') else 'nein'}")
+    return lines
+
+
+def _insider_section(d: dict) -> list[str]:
+    trades = [t for t in d.get("trades") or [] if isinstance(t, dict)]
+    clusters = sorted({t.get("ticker") for t in trades if t.get("cluster") and t.get("ticker")})
+    lines = [f"Insider-Käufe (OpenInsider, letzte {d.get('window_days')} Tage, Stand {str(d.get('generated_at'))[:10]}):"
+             f" {len(trades)} gefilterte Käufe, Cluster-Käufe bei: {', '.join(clusters) or 'keine'}"]
+    top = sorted(trades, key=lambda t: float(t.get("value") or 0), reverse=True)[:INSIDER_TOP]
+    for t in top:
+        lines.append(f"  - {t.get('ticker')} ({t.get('company')}): {t.get('insider')} ({t.get('title')}) kaufte"
+                     f" {_fmt_usd(t.get('value'))} am {t.get('trade_date')} zu ${t.get('price')},"
+                     f" Bestandsänderung {t.get('delta_own')}%{' [CLUSTER]' if t.get('cluster') else ''}")
+    return lines
+
+
+def build_market_context(data_dir: str = DATA_DIR) -> str:
+    """Compact text summary of the dashboard's own analyses; missing or broken files are skipped."""
+    sections = [
+        ("feargreed", _fg_section),
+        ("futuresfg", _futures_section),
+        ("cot", _cot_section),
+        ("insider", _insider_section),
+    ]
+    parts = []
+    for name, fn in sections:
+        d = _read_json(os.path.join(data_dir, f"{name}.json"))
+        if isinstance(d, dict):
+            try:
+                parts.append("\n".join(fn(d)))
+            except Exception:
+                logger.exception("Could not summarise %s.json", name)
+    return "\n\n".join(parts)
+
+
+def build_prompt(today: date, context: str = "") -> str:
     day = today.strftime("%d.%m.%Y")
-    return f"""Heute ist der {day}. Durchsuche das Web nach aktuellen Posts und News der letzten 48 Stunden zu folgenden Themen:
+    return f"""Heute ist der {day}. Du bist Marktanalyst und schreibst einen kompakten Markt-Research-Report auf Deutsch.
 
-1. Suche auf Reddit (r/algotrading, r/ClaudeAI, r/ChatGPTCoding, r/openclaw) und im Web nach:
-   - Trading Bots und algorithmischer Handel mit AI/LLMs
-   - OpenClaw — Use Cases, Projekte und Erfahrungen
-   - OpenClaw speziell für Trading oder Finance-Automatisierung
+## Eigene Auswertungen aus dem Dashboard (Hauptgrundlage)
+{context or "(Keine eigenen Auswertungen verfügbar.)"}
 
-2. Finde die interessantesten und meistdiskutierten Beiträge/Diskussionen.
+## Aufgabe
+1. Werte die eigenen Auswertungen oben aus: Was sagen Fear & Greed (Aktien und Bitcoin-Futures), COT-Signale und Insider-Käufe zusammen über die Marktlage? Wo bestätigen oder widersprechen sie sich?
+2. Durchsuche das Web nach News und Analysen der letzten 48 Stunden zum allgemeinen Aktienmarkt (S&P 500, Nasdaq, DAX, Zinsen/Fed/EZB, Anleihen, Dollar, Rohstoffe) und zum Krypto-Markt (Bitcoin, Ethereum, ETF-Flows, Funding/Open Interest, Regulierung). Recherchiere auch kurz die Unternehmen mit den auffälligsten Insider-Käufen (Cluster oder große Beträge).
+3. Leite daraus konkrete, begründete Trade-Ideen ab. Jede Idee muss sich auf mindestens eine der eigenen Auswertungen oder eine genannte Quelle stützen. Erfinde keine Kurse oder Zahlen; nenne nur Werte aus den Daten oben oder aus Quellen.
 
-3. Erstelle einen strukturierten Report auf Deutsch mit diesen Abschnitten:
+Gliedere den Report genau so:
 
 # Research Report — {day}
 
-## 🤖 Trading & Finance Bots
-Top Highlights und Diskussionen der letzten 48h
+## 🧭 Marktlage auf einen Blick
+3-5 Bullet Points: Gesamtbild und Stimmung (Risk-on/Risk-off) mit Bezug auf die eigenen Indizes
 
-## 🦀 OpenClaw Use Cases
-Interessante Projekte, die Leute bauen
+## 📈 Aktienmarkt
+Wichtigste Entwicklungen und Treiber der letzten 48h, mit Quellen
 
-## 🦀📈 OpenClaw + Trading
-Spezifische Finance/Trading-Anwendungen
+## ₿ Krypto
+Wichtigste Entwicklungen, Bezug auf den Bitcoin Futures Fear & Greed, mit Quellen
 
-## 💡 Key Takeaways
-3-5 Bullet Points, die man wissen sollte
+## 📡 COT & Insider
+Was die COT-Signale und die auffälligsten Insider-Käufe bedeuten
+
+## 💡 Trade-Ideen
+3-5 Ideen als nummerierte Liste, je: **Instrument (Long/Short)** – Begründung mit Datenbezug; Auslöser/Einstieg; Invalidierung (wann die Idee falsch ist); Zeithorizont; Risiko (niedrig/mittel/hoch)
+
+## ⚠️ Risiken & Termine
+Wichtige Termine der nächsten 7 Tage (Notenbanken, Makrodaten, Earnings) und Hauptrisiken
 
 ---
-Halte den Report kompakt (max 1 Seite). Fokus auf Signal, nicht Noise.
-Gib bei jedem Punkt die Quelle/den Link an, wenn verfügbar.
+*Automatisch erstellt, keine Anlageberatung.*
+
+Regeln: max. ca. 1,5 Seiten, Fokus auf Signal statt Noise. Keine Markdown-Tabellen, nur Überschriften, Absätze und Listen.
+Gib bei Web-Fakten die Quelle als Markdown-Link an.
 Antworte nach der Recherche ausschließlich mit dem fertigen Markdown-Report, ohne Vorrede."""
 
 
@@ -86,10 +188,11 @@ def openrouter_sender(api_key: str) -> Callable[[dict], dict]:
 
 
 def generate_report(
-    send: Callable[[dict], dict], today: date | None = None, model: str = MODEL
+    send: Callable[[dict], dict], today: date | None = None, model: str = MODEL,
+    context: str | None = None,
 ) -> tuple[str, str]:
     """Return the report and the model OpenRouter actually used."""
-    prompt = build_prompt(today or date.today())
+    prompt = build_prompt(today or date.today(), build_market_context() if context is None else context)
     data = send({
         "model": model,
         "max_tokens": MAX_TOKENS,
