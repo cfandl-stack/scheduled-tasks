@@ -132,7 +132,7 @@ def build_prompt(today: date, context: str = "") -> str:
 
 ## Aufgabe
 1. Werte die eigenen Auswertungen oben aus: Was sagen Fear & Greed (Aktien und Bitcoin-Futures), COT-Signale und Insider-Käufe zusammen über die Marktlage? Wo bestätigen oder widersprechen sie sich?
-2. Durchsuche das Web nach News und Analysen der letzten 48 Stunden zum allgemeinen Aktienmarkt (S&P 500, Nasdaq, DAX, Zinsen/Fed/EZB, Anleihen, Dollar, Rohstoffe) und zum Krypto-Markt (Bitcoin, Ethereum, ETF-Flows, Funding/Open Interest, Regulierung). Recherchiere auch kurz die Unternehmen mit den auffälligsten Insider-Käufen (Cluster oder große Beträge).
+2. Durchsuche das Web nach News und Analysen der letzten 7 Tage zum allgemeinen Aktienmarkt (S&P 500, Nasdaq, DAX, Zinsen/Fed/EZB, Anleihen, Dollar, Rohstoffe) und zum Krypto-Markt (Bitcoin, Ethereum, ETF-Flows, Funding/Open Interest, Regulierung). Recherchiere auch kurz die Unternehmen mit den auffälligsten Insider-Käufen (Cluster oder große Beträge).
 3. Leite daraus konkrete, begründete Trade-Ideen ab. Jede Idee muss sich auf mindestens eine der eigenen Auswertungen oder eine genannte Quelle stützen. Erfinde keine Kurse oder Zahlen; nenne nur Werte aus den Daten oben oder aus Quellen.
 
 Gliedere den Report genau so:
@@ -143,7 +143,7 @@ Gliedere den Report genau so:
 3-5 Bullet Points: Gesamtbild und Stimmung (Risk-on/Risk-off) mit Bezug auf die eigenen Indizes
 
 ## 📈 Aktienmarkt
-Wichtigste Entwicklungen und Treiber der letzten 48h, mit Quellen
+Wichtigste Entwicklungen und Treiber der letzten 7 Tage, mit Quellen
 
 ## ₿ Krypto
 Wichtigste Entwicklungen, Bezug auf den Bitcoin Futures Fear & Greed, mit Quellen

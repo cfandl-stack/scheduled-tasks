@@ -58,7 +58,7 @@ class TestGenerateReport:
         assert tool["type"] == "openrouter:web_search"
         assert tool["parameters"]["max_uses"] > 0
         assert "20.10.2026" in call["messages"][0]["content"]
-        assert "48 Stunden" in call["messages"][0]["content"]
+        assert "letzten 7 Tage" in call["messages"][0]["content"]
 
     def test_empty_content_raises(self):
         with pytest.raises(RuntimeError, match="No report text"):
