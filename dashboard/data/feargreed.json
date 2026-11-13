@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-11-12T02:58:34Z",
-  "as_of": "2026-11-11",
-  "score": 23,
+  "generated_at": "2026-11-13T02:38:19Z",
+  "as_of": "2026-11-12",
+  "score": 20,
   "rating": "Extreme Fear",
   "rating_de": "Extreme Angst",
-  "previous_close": 16,
-  "one_week_ago": 28,
-  "one_month_ago": 49,
-  "one_year_ago": 65,
+  "previous_close": 23,
+  "one_week_ago": 4,
+  "one_month_ago": 50,
+  "one_year_ago": 61,
   "components": [
     {
       "key": "momentum",
@@ -16,82 +16,78 @@
       "score": 12,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 0.3667,
-      "value_label": "S&P 500 vs. 125T-Schnitt: +0.4%",
+      "value": -0.0081,
+      "value_label": "S&P 500 vs. 125T-Schnitt: -0.0%",
       "description_de": "S&P 500 im Vergleich zu seinem gleitenden 125-Tage-Durchschnitt. Deutlich darüber = Gier."
     },
     {
       "key": "strength",
       "name": "Stock Price Strength",
       "name_de": "Kursstärke",
-      "score": 70,
-      "rating": "Greed",
-      "rating_de": "Gier",
-      "value": 6.6667,
-      "value_label": "Netto 52W-Hochs: +6.7% des Korbs",
+      "score": 41,
+      "rating": "Fear",
+      "rating_de": "Angst",
+      "value": 2.8571,
+      "value_label": "Netto 52W-Hochs: +2.9% des Korbs",
       "description_de": "Anteil der ~100 größten US-Aktien auf 52-Wochen-Hoch minus Anteil auf 52-Wochen-Tief (Näherung für NYSE-Hochs/-Tiefs)."
     },
     {
       "key": "breadth",
       "name": "Stock Price Breadth",
       "name_de": "Marktbreite",
-      "score": 11,
+      "score": 1,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -5.9292,
-      "value_label": "Netto-Aufwärtsvolumen (20T): -5.9%",
+      "value": -10.0806,
+      "value_label": "Netto-Aufwärtsvolumen (20T): -10.1%",
       "description_de": "Volumen steigender minus fallender Aktien des Korbs über 20 Tage (Näherung für den McClellan Volume Summation Index)."
     },
     {
       "key": "put_call",
       "name": "Put and Call Options",
       "name_de": "Put/Call-Optionen",
-      "score": 6,
+      "score": 13,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 0.9905,
-      "value_label": "VIX/VIX3M (5T-Ø): 0.99",
+      "value": 0.9563,
+      "value_label": "VIX/VIX3M (5T-Ø): 0.96",
       "description_de": "5-Tage-Schnitt von VIX/VIX3M als Ersatz für die Put/Call-Ratio. Hoher Wert = teure kurzfristige Absicherung = Angst."
     },
     {
       "key": "volatility",
       "name": "Market Volatility",
       "name_de": "Marktvolatilität",
-      "score": 38,
+      "score": 28,
       "rating": "Fear",
       "rating_de": "Angst",
-      "value": 2.1004,
-      "value_label": "VIX vs. 50T-Schnitt: +2.1%",
+      "value": 8.6085,
+      "value_label": "VIX vs. 50T-Schnitt: +8.6%",
       "description_de": "VIX im Vergleich zu seinem gleitenden 50-Tage-Durchschnitt. Steigende Volatilität = Angst."
     },
     {
       "key": "safe_haven",
       "name": "Safe Haven Demand",
       "name_de": "Nachfrage nach sicheren Häfen",
-      "score": 8,
+      "score": 17,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -2.9879,
-      "value_label": "SPY − IEF (20T): -3.0 Pp",
+      "value": -2.0854,
+      "value_label": "SPY − IEF (20T): -2.1 Pp",
       "description_de": "20-Tage-Rendite von Aktien (SPY) minus Staatsanleihen (IEF). Anleihen vorne = Flucht in Sicherheit = Angst."
     },
     {
       "key": "junk_bond",
       "name": "Junk Bond Demand",
       "name_de": "Nachfrage nach Hochzinsanleihen",
-      "score": 18,
-      "rating": "Extreme Fear",
-      "rating_de": "Extreme Angst",
-      "value": -0.4886,
-      "value_label": "HYG − IEF (20T): -0.5 Pp",
+      "score": 31,
+      "rating": "Fear",
+      "rating_de": "Angst",
+      "value": 0.1405,
+      "value_label": "HYG − IEF (20T): +0.1 Pp",
       "description_de": "20-Tage-Rendite von Hochzinsanleihen (HYG) minus Staatsanleihen (IEF) als Näherung für den Renditeaufschlag. Junk Bonds vorne = Gier."
     }
   ],
   "history": [
-    {
-      "date": "2025-11-13",
-      "score": 53
-    },
     {
       "date": "2025-11-14",
       "score": 47
@@ -1095,6 +1091,10 @@
     {
       "date": "2026-11-11",
       "score": 23
+    },
+    {
+      "date": "2026-11-12",
+      "score": 20
     }
   ]
 }
