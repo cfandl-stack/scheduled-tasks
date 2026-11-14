@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-07T00:32:43Z",
-  "report_date": "2026-11-07",
+  "generated_at": "2026-11-14T01:09:54Z",
+  "report_date": "2026-11-14",
   "signal_count": 0,
   "buy_signals": [],
   "full_status": [
@@ -37,7 +37,7 @@
     {
       "commodity": "Natural Gas",
       "commercial_signal": false,
-      "trend_signal": false,
+      "trend_signal": true,
       "combined": false
     }
   ]
