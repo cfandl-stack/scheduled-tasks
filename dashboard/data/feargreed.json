@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-11-20T03:14:14Z",
-  "as_of": "2026-11-19",
-  "score": 4,
+  "generated_at": "2026-11-21T03:12:55Z",
+  "as_of": "2026-11-20",
+  "score": 1,
   "rating": "Extreme Fear",
   "rating_de": "Extreme Angst",
-  "previous_close": 5,
-  "one_week_ago": 20,
-  "one_month_ago": 30,
-  "one_year_ago": 34,
+  "previous_close": 4,
+  "one_week_ago": 32,
+  "one_month_ago": 28,
+  "one_year_ago": 18,
   "components": [
     {
       "key": "momentum",
       "name": "Market Momentum",
       "name_de": "Marktmomentum",
-      "score": 1,
+      "score": 0,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -5.4654,
-      "value_label": "S&P 500 vs. 125T-Schnitt: -5.5%",
+      "value": -8.9039,
+      "value_label": "S&P 500 vs. 125T-Schnitt: -8.9%",
       "description_de": "S&P 500 im Vergleich zu seinem gleitenden 125-Tage-Durchschnitt. Deutlich darüber = Gier."
     },
     {
@@ -27,8 +27,8 @@
       "score": 0,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -7.0,
-      "value_label": "Netto 52W-Hochs: -7.0% des Korbs",
+      "value": -7.619,
+      "value_label": "Netto 52W-Hochs: -7.6% des Korbs",
       "description_de": "Anteil der ~100 größten US-Aktien auf 52-Wochen-Hoch minus Anteil auf 52-Wochen-Tief (Näherung für NYSE-Hochs/-Tiefs)."
     },
     {
@@ -38,56 +38,60 @@
       "score": 0,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -23.2338,
-      "value_label": "Netto-Aufwärtsvolumen (20T): -23.2%",
+      "value": -25.6896,
+      "value_label": "Netto-Aufwärtsvolumen (20T): -25.7%",
       "description_de": "Volumen steigender minus fallender Aktien des Korbs über 20 Tage (Näherung für den McClellan Volume Summation Index)."
     },
     {
       "key": "put_call",
       "name": "Put and Call Options",
       "name_de": "Put/Call-Optionen",
-      "score": 3,
+      "score": 0,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 1.0027,
-      "value_label": "VIX/VIX3M (5T-Ø): 1.00",
+      "value": 1.0475,
+      "value_label": "VIX/VIX3M (5T-Ø): 1.05",
       "description_de": "5-Tage-Schnitt von VIX/VIX3M als Ersatz für die Put/Call-Ratio. Hoher Wert = teure kurzfristige Absicherung = Angst."
     },
     {
       "key": "volatility",
       "name": "Market Volatility",
       "name_de": "Marktvolatilität",
-      "score": 1,
+      "score": 0,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 57.7004,
-      "value_label": "VIX vs. 50T-Schnitt: +57.7%",
+      "value": 94.6819,
+      "value_label": "VIX vs. 50T-Schnitt: +94.7%",
       "description_de": "VIX im Vergleich zu seinem gleitenden 50-Tage-Durchschnitt. Steigende Volatilität = Angst."
     },
     {
       "key": "safe_haven",
       "name": "Safe Haven Demand",
       "name_de": "Nachfrage nach sicheren Häfen",
-      "score": 2,
+      "score": 0,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -6.2168,
-      "value_label": "SPY − IEF (20T): -6.2 Pp",
+      "value": -10.2332,
+      "value_label": "SPY − IEF (20T): -10.2 Pp",
       "description_de": "20-Tage-Rendite von Aktien (SPY) minus Staatsanleihen (IEF). Anleihen vorne = Flucht in Sicherheit = Angst."
     },
     {
       "key": "junk_bond",
       "name": "Junk Bond Demand",
       "name_de": "Nachfrage nach Hochzinsanleihen",
-      "score": 24,
+      "score": 9,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -0.1446,
-      "value_label": "HYG − IEF (20T): -0.1 Pp",
+      "value": -1.42,
+      "value_label": "HYG − IEF (20T): -1.4 Pp",
       "description_de": "20-Tage-Rendite von Hochzinsanleihen (HYG) minus Staatsanleihen (IEF) als Näherung für den Renditeaufschlag. Junk Bonds vorne = Gier."
     }
   ],
   "history": [
+    {
+      "date": "2025-11-20",
+      "score": 18
+    },
     {
       "date": "2025-11-21",
       "score": 27
@@ -589,10 +593,6 @@
       "score": 80
     },
     {
-      "date": "2026-05-25",
-      "score": 80
-    },
-    {
       "date": "2026-05-26",
       "score": 74
     },
@@ -626,7 +626,7 @@
     },
     {
       "date": "2026-06-05",
-      "score": 40
+      "score": 41
     },
     {
       "date": "2026-06-08",
@@ -650,7 +650,7 @@
     },
     {
       "date": "2026-06-15",
-      "score": 44
+      "score": 45
     },
     {
       "date": "2026-06-16",
@@ -662,7 +662,7 @@
     },
     {
       "date": "2026-06-18",
-      "score": 33
+      "score": 34
     },
     {
       "date": "2026-06-22",
@@ -758,7 +758,7 @@
     },
     {
       "date": "2026-07-24",
-      "score": 51
+      "score": 50
     },
     {
       "date": "2026-07-27",
@@ -881,10 +881,6 @@
       "score": 46
     },
     {
-      "date": "2026-09-07",
-      "score": 44
-    },
-    {
       "date": "2026-09-08",
       "score": 35
     },
@@ -962,7 +958,7 @@
     },
     {
       "date": "2026-10-05",
-      "score": 41
+      "score": 42
     },
     {
       "date": "2026-10-06",
@@ -1095,6 +1091,10 @@
     {
       "date": "2026-11-19",
       "score": 4
+    },
+    {
+      "date": "2026-11-20",
+      "score": 1
     }
   ]
 }
