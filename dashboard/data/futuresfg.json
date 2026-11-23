@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-11-22T07:06:18Z",
-  "as_of": "2026-11-21",
+  "generated_at": "2026-11-23T07:53:28Z",
+  "as_of": "2026-11-22",
   "index": 24,
-  "today": 18,
+  "today": 24,
   "rating": "Extreme Fear",
   "rating_de": "Extreme Angst",
-  "previous_day": 26,
-  "one_week_ago": 37,
-  "one_month_ago": 44,
+  "previous_day": 24,
+  "one_week_ago": 36,
+  "one_month_ago": 45,
   "components_scored": 9,
   "groups": [
     {
@@ -17,37 +17,37 @@
         {
           "key": "funding",
           "name_de": "Funding",
-          "score": 0,
-          "value": -0.003497,
-          "value_label": "−0,0035 %",
-          "value_date": "2026-11-21",
+          "score": 6,
+          "value": 0.000638,
+          "value_label": "+0,0006 %",
+          "value_date": "2026-11-22",
           "description_de": "Wer zahlt, um long zu sein: Tagesmittel der Perpetual-Funding-Rate (je 8 Stunden). Hohes Funding = gehebelte Longs = Gier.",
           "source": "OKX",
-          "history_days": 132,
+          "history_days": 133,
           "error": null
         },
         {
           "key": "oi_change",
           "name_de": "Open-Interest-Änderung",
-          "score": 13,
-          "value": -3.379899,
-          "value_label": "−3,4 %",
-          "value_date": "2026-11-21",
+          "score": 58,
+          "value": 0.543478,
+          "value_label": "+0,5 %",
+          "value_date": "2026-11-22",
           "description_de": "24-Stunden-Änderung des offenen BTC-Futures-Interesses: frischer Hebel fließt rein (Gier) oder wird abgebaut (Angst).",
           "source": "OKX",
-          "history_days": 212,
+          "history_days": 213,
           "error": null
         },
         {
           "key": "long_short",
           "name_de": "Long/Short",
-          "score": 83,
-          "value": 2.11,
-          "value_label": "2,11",
-          "value_date": "2026-11-21",
+          "score": 88,
+          "value": 2.16,
+          "value_label": "2,16",
+          "value_date": "2026-11-22",
           "description_de": "Verhältnis der Konten mit Long- zu Short-Positionen. Mehr Longs = Gier.",
           "source": "OKX",
-          "history_days": 213,
+          "history_days": 214,
           "error": null
         },
         {
@@ -65,10 +65,10 @@
         {
           "key": "rsi_vol",
           "name_de": "RSI und Volatilität",
-          "score": 13,
-          "value": 22.709435,
-          "value_label": "RSI 23",
-          "value_date": "2026-11-21",
+          "score": 14,
+          "value": 26.815877,
+          "value_label": "RSI 27",
+          "value_date": "2026-11-22",
           "description_de": "Wie überdehnt der Kurs ist: Mittel aus RSI(14) und invertierter 30-Tage-Volatilität. Hoher RSI bei ruhigem Markt = Gier.",
           "source": "Yahoo Finance",
           "history_days": 365,
@@ -96,9 +96,9 @@
           "key": "stablecoins",
           "name_de": "Stablecoin-Zufluss",
           "score": 1,
-          "value": -1.581619,
+          "value": -1.602279,
           "value_label": "−1,6 %",
-          "value_date": "2026-11-21",
+          "value_date": "2026-11-22",
           "description_de": "7-Tage-Änderung der gesamten Stablecoin-Marktkapitalisierung: trockenes Pulver, das in den Markt kommt.",
           "source": "DefiLlama",
           "history_days": 365,
@@ -107,10 +107,10 @@
         {
           "key": "coinbase_premium",
           "name_de": "Coinbase-Premium",
-          "score": 1,
-          "value": -0.215508,
-          "value_label": "−0,216 %",
-          "value_date": "2026-11-21",
+          "score": 3,
+          "value": -0.17638,
+          "value_label": "−0,176 %",
+          "value_date": "2026-11-22",
           "description_de": "Aufschlag von BTC-USD auf Coinbase gegenüber BTC-USDT im Ausland: US-Käufer zahlen mehr = Gier.",
           "source": "Coinbase vs. Binance",
           "history_days": 365,
@@ -144,11 +144,6 @@
     }
   ],
   "history": [
-    {
-      "date": "2025-11-22",
-      "daily": 13,
-      "index": 11
-    },
     {
       "date": "2025-11-23",
       "daily": 15,
@@ -1967,6 +1962,11 @@
     {
       "date": "2026-11-21",
       "daily": 18,
+      "index": 24
+    },
+    {
+      "date": "2026-11-22",
+      "daily": 24,
       "index": 24
     }
   ]
