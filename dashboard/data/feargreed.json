@@ -1,45 +1,45 @@
 {
-  "generated_at": "2026-11-21T03:12:55Z",
-  "as_of": "2026-11-20",
-  "score": 1,
+  "generated_at": "2026-11-24T06:02:10Z",
+  "as_of": "2026-11-23",
+  "score": 4,
   "rating": "Extreme Fear",
   "rating_de": "Extreme Angst",
-  "previous_close": 4,
-  "one_week_ago": 32,
-  "one_month_ago": 28,
-  "one_year_ago": 18,
+  "previous_close": 0,
+  "one_week_ago": 17,
+  "one_month_ago": 17,
+  "one_year_ago": 24,
   "components": [
     {
       "key": "momentum",
       "name": "Market Momentum",
       "name_de": "Marktmomentum",
-      "score": 0,
+      "score": 2,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -8.9039,
-      "value_label": "S&P 500 vs. 125T-Schnitt: -8.9%",
+      "value": -4.5676,
+      "value_label": "S&P 500 vs. 125T-Schnitt: -4.6%",
       "description_de": "S&P 500 im Vergleich zu seinem gleitenden 125-Tage-Durchschnitt. Deutlich darüber = Gier."
     },
     {
       "key": "strength",
       "name": "Stock Price Strength",
       "name_de": "Kursstärke",
-      "score": 0,
+      "score": 17,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -7.619,
-      "value_label": "Netto 52W-Hochs: -7.6% des Korbs",
+      "value": 0.0,
+      "value_label": "Netto 52W-Hochs: +0.0% des Korbs",
       "description_de": "Anteil der ~100 größten US-Aktien auf 52-Wochen-Hoch minus Anteil auf 52-Wochen-Tief (Näherung für NYSE-Hochs/-Tiefs)."
     },
     {
       "key": "breadth",
       "name": "Stock Price Breadth",
       "name_de": "Marktbreite",
-      "score": 0,
+      "score": 1,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -25.6896,
-      "value_label": "Netto-Aufwärtsvolumen (20T): -25.7%",
+      "value": -19.7148,
+      "value_label": "Netto-Aufwärtsvolumen (20T): -19.7%",
       "description_de": "Volumen steigender minus fallender Aktien des Korbs über 20 Tage (Näherung für den McClellan Volume Summation Index)."
     },
     {
@@ -49,76 +49,61 @@
       "score": 0,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 1.0475,
-      "value_label": "VIX/VIX3M (5T-Ø): 1.05",
+      "value": 1.0573,
+      "value_label": "VIX/VIX3M (5T-Ø): 1.06",
       "description_de": "5-Tage-Schnitt von VIX/VIX3M als Ersatz für die Put/Call-Ratio. Hoher Wert = teure kurzfristige Absicherung = Angst."
     },
     {
       "key": "volatility",
       "name": "Market Volatility",
       "name_de": "Marktvolatilität",
-      "score": 0,
+      "score": 4,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 94.6819,
-      "value_label": "VIX vs. 50T-Schnitt: +94.7%",
+      "value": 42.9216,
+      "value_label": "VIX vs. 50T-Schnitt: +42.9%",
       "description_de": "VIX im Vergleich zu seinem gleitenden 50-Tage-Durchschnitt. Steigende Volatilität = Angst."
     },
     {
       "key": "safe_haven",
       "name": "Safe Haven Demand",
       "name_de": "Nachfrage nach sicheren Häfen",
-      "score": 0,
+      "score": 1,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -10.2332,
-      "value_label": "SPY − IEF (20T): -10.2 Pp",
+      "value": -6.5413,
+      "value_label": "SPY − IEF (20T): -6.5 Pp",
       "description_de": "20-Tage-Rendite von Aktien (SPY) minus Staatsanleihen (IEF). Anleihen vorne = Flucht in Sicherheit = Angst."
     },
     {
       "key": "junk_bond",
       "name": "Junk Bond Demand",
       "name_de": "Nachfrage nach Hochzinsanleihen",
-      "score": 9,
-      "rating": "Extreme Fear",
-      "rating_de": "Extreme Angst",
-      "value": -1.42,
-      "value_label": "HYG − IEF (20T): -1.4 Pp",
+      "score": null,
+      "error": "KeyError: 'No data for HYG'",
       "description_de": "20-Tage-Rendite von Hochzinsanleihen (HYG) minus Staatsanleihen (IEF) als Näherung für den Renditeaufschlag. Junk Bonds vorne = Gier."
     }
   ],
   "history": [
     {
-      "date": "2025-11-20",
-      "score": 18
-    },
-    {
-      "date": "2025-11-21",
-      "score": 27
-    },
-    {
-      "date": "2025-11-24",
-      "score": 27
-    },
-    {
       "date": "2025-11-25",
-      "score": 39
+      "score": 38
     },
     {
       "date": "2025-11-26",
-      "score": 43
+      "score": 45
     },
     {
       "date": "2025-11-28",
-      "score": 53
+      "score": 55
     },
     {
       "date": "2025-12-01",
-      "score": 48
+      "score": 46
     },
     {
       "date": "2025-12-02",
-      "score": 56
+      "score": 54
     },
     {
       "date": "2025-12-03",
@@ -130,15 +115,15 @@
     },
     {
       "date": "2025-12-05",
-      "score": 75
+      "score": 74
     },
     {
       "date": "2025-12-08",
-      "score": 65
+      "score": 63
     },
     {
       "date": "2025-12-09",
-      "score": 62
+      "score": 61
     },
     {
       "date": "2025-12-10",
@@ -146,11 +131,11 @@
     },
     {
       "date": "2025-12-11",
-      "score": 71
+      "score": 70
     },
     {
       "date": "2025-12-12",
-      "score": 71
+      "score": 69
     },
     {
       "date": "2025-12-15",
@@ -158,15 +143,15 @@
     },
     {
       "date": "2025-12-16",
-      "score": 62
+      "score": 60
     },
     {
       "date": "2025-12-17",
-      "score": 56
+      "score": 53
     },
     {
       "date": "2025-12-18",
-      "score": 62
+      "score": 60
     },
     {
       "date": "2025-12-19",
@@ -182,7 +167,7 @@
     },
     {
       "date": "2025-12-24",
-      "score": 84
+      "score": 85
     },
     {
       "date": "2025-12-26",
@@ -190,7 +175,7 @@
     },
     {
       "date": "2025-12-29",
-      "score": 68
+      "score": 67
     },
     {
       "date": "2025-12-30",
@@ -198,11 +183,11 @@
     },
     {
       "date": "2025-12-31",
-      "score": 58
+      "score": 56
     },
     {
       "date": "2026-01-02",
-      "score": 66
+      "score": 64
     },
     {
       "date": "2026-01-05",
@@ -210,15 +195,15 @@
     },
     {
       "date": "2026-01-06",
-      "score": 70
+      "score": 71
     },
     {
       "date": "2026-01-07",
-      "score": 53
+      "score": 52
     },
     {
       "date": "2026-01-08",
-      "score": 65
+      "score": 64
     },
     {
       "date": "2026-01-09",
@@ -226,7 +211,7 @@
     },
     {
       "date": "2026-01-12",
-      "score": 68
+      "score": 67
     },
     {
       "date": "2026-01-13",
@@ -238,71 +223,71 @@
     },
     {
       "date": "2026-01-15",
-      "score": 67
+      "score": 65
     },
     {
       "date": "2026-01-16",
-      "score": 68
+      "score": 65
     },
     {
       "date": "2026-01-20",
-      "score": 39
+      "score": 31
     },
     {
       "date": "2026-01-21",
-      "score": 52
+      "score": 46
     },
     {
       "date": "2026-01-22",
-      "score": 58
-    },
-    {
-      "date": "2026-01-23",
-      "score": 48
-    },
-    {
-      "date": "2026-01-26",
-      "score": 48
-    },
-    {
-      "date": "2026-01-27",
-      "score": 60
-    },
-    {
-      "date": "2026-01-28",
-      "score": 60
-    },
-    {
-      "date": "2026-01-29",
-      "score": 57
-    },
-    {
-      "date": "2026-01-30",
-      "score": 55
-    },
-    {
-      "date": "2026-02-02",
-      "score": 64
-    },
-    {
-      "date": "2026-02-03",
       "score": 53
     },
     {
+      "date": "2026-01-23",
+      "score": 43
+    },
+    {
+      "date": "2026-01-26",
+      "score": 43
+    },
+    {
+      "date": "2026-01-27",
+      "score": 56
+    },
+    {
+      "date": "2026-01-28",
+      "score": 56
+    },
+    {
+      "date": "2026-01-29",
+      "score": 54
+    },
+    {
+      "date": "2026-01-30",
+      "score": 52
+    },
+    {
+      "date": "2026-02-02",
+      "score": 61
+    },
+    {
+      "date": "2026-02-03",
+      "score": 50
+    },
+    {
       "date": "2026-02-04",
-      "score": 48
-    },
-    {
-      "date": "2026-02-05",
-      "score": 36
-    },
-    {
-      "date": "2026-02-06",
       "score": 44
     },
     {
+      "date": "2026-02-05",
+      "score": 33
+    },
+    {
+      "date": "2026-02-06",
+      "score": 42
+    },
+    {
       "date": "2026-02-09",
-      "score": 45
+      "score": 43
     },
     {
       "date": "2026-02-10",
@@ -310,67 +295,67 @@
     },
     {
       "date": "2026-02-11",
-      "score": 41
+      "score": 40
     },
     {
       "date": "2026-02-12",
-      "score": 29
-    },
-    {
-      "date": "2026-02-13",
-      "score": 32
-    },
-    {
-      "date": "2026-02-17",
-      "score": 24
-    },
-    {
-      "date": "2026-02-18",
-      "score": 36
-    },
-    {
-      "date": "2026-02-19",
-      "score": 31
-    },
-    {
-      "date": "2026-02-20",
-      "score": 34
-    },
-    {
-      "date": "2026-02-23",
-      "score": 24
-    },
-    {
-      "date": "2026-02-24",
-      "score": 34
-    },
-    {
-      "date": "2026-02-25",
-      "score": 34
-    },
-    {
-      "date": "2026-02-26",
       "score": 28
     },
     {
-      "date": "2026-02-27",
-      "score": 32
+      "date": "2026-02-13",
+      "score": 34
     },
     {
-      "date": "2026-03-02",
+      "date": "2026-02-17",
+      "score": 26
+    },
+    {
+      "date": "2026-02-18",
+      "score": 40
+    },
+    {
+      "date": "2026-02-19",
+      "score": 34
+    },
+    {
+      "date": "2026-02-20",
+      "score": 37
+    },
+    {
+      "date": "2026-02-23",
+      "score": 26
+    },
+    {
+      "date": "2026-02-24",
+      "score": 39
+    },
+    {
+      "date": "2026-02-25",
+      "score": 38
+    },
+    {
+      "date": "2026-02-26",
       "score": 31
     },
     {
+      "date": "2026-02-27",
+      "score": 36
+    },
+    {
+      "date": "2026-03-02",
+      "score": 34
+    },
+    {
       "date": "2026-03-03",
-      "score": 17
+      "score": 19
     },
     {
       "date": "2026-03-04",
-      "score": 25
+      "score": 27
     },
     {
       "date": "2026-03-05",
-      "score": 18
+      "score": 19
     },
     {
       "date": "2026-03-06",
@@ -382,159 +367,159 @@
     },
     {
       "date": "2026-03-10",
-      "score": 16
+      "score": 15
     },
     {
       "date": "2026-03-11",
-      "score": 22
+      "score": 20
     },
     {
       "date": "2026-03-12",
-      "score": 14
+      "score": 13
     },
     {
       "date": "2026-03-13",
-      "score": 21
-    },
-    {
-      "date": "2026-03-16",
-      "score": 27
-    },
-    {
-      "date": "2026-03-17",
-      "score": 29
-    },
-    {
-      "date": "2026-03-18",
-      "score": 18
-    },
-    {
-      "date": "2026-03-19",
-      "score": 21
-    },
-    {
-      "date": "2026-03-20",
-      "score": 17
-    },
-    {
-      "date": "2026-03-23",
-      "score": 22
-    },
-    {
-      "date": "2026-03-24",
       "score": 19
     },
     {
-      "date": "2026-03-25",
-      "score": 17
-    },
-    {
-      "date": "2026-03-26",
-      "score": 22
-    },
-    {
-      "date": "2026-03-27",
-      "score": 16
-    },
-    {
-      "date": "2026-03-30",
-      "score": 12
-    },
-    {
-      "date": "2026-03-31",
-      "score": 24
-    },
-    {
-      "date": "2026-04-01",
-      "score": 23
-    },
-    {
-      "date": "2026-04-02",
-      "score": 22
-    },
-    {
-      "date": "2026-04-06",
-      "score": 30
-    },
-    {
-      "date": "2026-04-07",
+      "date": "2026-03-16",
       "score": 25
     },
     {
+      "date": "2026-03-17",
+      "score": 26
+    },
+    {
+      "date": "2026-03-18",
+      "score": 14
+    },
+    {
+      "date": "2026-03-19",
+      "score": 16
+    },
+    {
+      "date": "2026-03-20",
+      "score": 11
+    },
+    {
+      "date": "2026-03-23",
+      "score": 14
+    },
+    {
+      "date": "2026-03-24",
+      "score": 10
+    },
+    {
+      "date": "2026-03-25",
+      "score": 9
+    },
+    {
+      "date": "2026-03-26",
+      "score": 12
+    },
+    {
+      "date": "2026-03-27",
+      "score": 5
+    },
+    {
+      "date": "2026-03-30",
+      "score": 5
+    },
+    {
+      "date": "2026-03-31",
+      "score": 15
+    },
+    {
+      "date": "2026-04-01",
+      "score": 16
+    },
+    {
+      "date": "2026-04-02",
+      "score": 14
+    },
+    {
+      "date": "2026-04-06",
+      "score": 20
+    },
+    {
+      "date": "2026-04-07",
+      "score": 15
+    },
+    {
       "date": "2026-04-08",
-      "score": 37
+      "score": 28
     },
     {
       "date": "2026-04-09",
-      "score": 44
+      "score": 38
     },
     {
       "date": "2026-04-10",
-      "score": 48
+      "score": 41
     },
     {
       "date": "2026-04-13",
-      "score": 60
+      "score": 55
     },
     {
       "date": "2026-04-14",
-      "score": 63
+      "score": 58
     },
     {
       "date": "2026-04-15",
-      "score": 64
+      "score": 60
     },
     {
       "date": "2026-04-16",
-      "score": 67
+      "score": 63
     },
     {
       "date": "2026-04-17",
-      "score": 76
+      "score": 75
     },
     {
       "date": "2026-04-20",
-      "score": 74
+      "score": 73
     },
     {
       "date": "2026-04-21",
-      "score": 66
+      "score": 64
     },
     {
       "date": "2026-04-22",
-      "score": 73
-    },
-    {
-      "date": "2026-04-23",
-      "score": 68
-    },
-    {
-      "date": "2026-04-24",
       "score": 72
     },
     {
+      "date": "2026-04-23",
+      "score": 65
+    },
+    {
+      "date": "2026-04-24",
+      "score": 71
+    },
+    {
       "date": "2026-04-27",
-      "score": 73
+      "score": 70
     },
     {
       "date": "2026-04-28",
-      "score": 68
+      "score": 64
     },
     {
       "date": "2026-04-29",
-      "score": 67
+      "score": 64
     },
     {
       "date": "2026-04-30",
-      "score": 75
+      "score": 74
     },
     {
       "date": "2026-05-01",
-      "score": 75
+      "score": 74
     },
     {
       "date": "2026-05-04",
-      "score": 64
+      "score": 63
     },
     {
       "date": "2026-05-05",
@@ -542,59 +527,63 @@
     },
     {
       "date": "2026-05-06",
-      "score": 79
+      "score": 83
     },
     {
       "date": "2026-05-07",
-      "score": 68
+      "score": 71
     },
     {
       "date": "2026-05-08",
-      "score": 77
+      "score": 79
     },
     {
       "date": "2026-05-11",
-      "score": 70
-    },
-    {
-      "date": "2026-05-12",
-      "score": 69
-    },
-    {
-      "date": "2026-05-13",
-      "score": 74
-    },
-    {
-      "date": "2026-05-14",
-      "score": 74
-    },
-    {
-      "date": "2026-05-15",
-      "score": 62
-    },
-    {
-      "date": "2026-05-18",
-      "score": 71
-    },
-    {
-      "date": "2026-05-19",
-      "score": 67
-    },
-    {
-      "date": "2026-05-20",
-      "score": 71
-    },
-    {
-      "date": "2026-05-21",
       "score": 72
     },
     {
+      "date": "2026-05-12",
+      "score": 68
+    },
+    {
+      "date": "2026-05-13",
+      "score": 76
+    },
+    {
+      "date": "2026-05-14",
+      "score": 76
+    },
+    {
+      "date": "2026-05-15",
+      "score": 59
+    },
+    {
+      "date": "2026-05-18",
+      "score": 68
+    },
+    {
+      "date": "2026-05-19",
+      "score": 64
+    },
+    {
+      "date": "2026-05-20",
+      "score": 69
+    },
+    {
+      "date": "2026-05-21",
+      "score": 71
+    },
+    {
       "date": "2026-05-22",
-      "score": 80
+      "score": 79
+    },
+    {
+      "date": "2026-05-25",
+      "score": 79
     },
     {
       "date": "2026-05-26",
-      "score": 74
+      "score": 75
     },
     {
       "date": "2026-05-27",
@@ -602,23 +591,23 @@
     },
     {
       "date": "2026-05-28",
-      "score": 73
+      "score": 76
     },
     {
       "date": "2026-05-29",
-      "score": 72
+      "score": 76
     },
     {
       "date": "2026-06-01",
-      "score": 73
+      "score": 76
     },
     {
       "date": "2026-06-02",
-      "score": 70
+      "score": 73
     },
     {
       "date": "2026-06-03",
-      "score": 61
+      "score": 62
     },
     {
       "date": "2026-06-04",
@@ -626,27 +615,27 @@
     },
     {
       "date": "2026-06-05",
-      "score": 41
+      "score": 36
     },
     {
       "date": "2026-06-08",
-      "score": 42
+      "score": 36
     },
     {
       "date": "2026-06-09",
-      "score": 35
+      "score": 31
     },
     {
       "date": "2026-06-10",
-      "score": 21
+      "score": 16
     },
     {
       "date": "2026-06-11",
-      "score": 30
+      "score": 27
     },
     {
       "date": "2026-06-12",
-      "score": 35
+      "score": 33
     },
     {
       "date": "2026-06-15",
@@ -654,7 +643,7 @@
     },
     {
       "date": "2026-06-16",
-      "score": 37
+      "score": 39
     },
     {
       "date": "2026-06-17",
@@ -670,11 +659,11 @@
     },
     {
       "date": "2026-06-23",
-      "score": 24
+      "score": 22
     },
     {
       "date": "2026-06-24",
-      "score": 19
+      "score": 20
     },
     {
       "date": "2026-06-25",
@@ -682,11 +671,11 @@
     },
     {
       "date": "2026-06-26",
-      "score": 25
+      "score": 26
     },
     {
       "date": "2026-06-29",
-      "score": 30
+      "score": 32
     },
     {
       "date": "2026-06-30",
@@ -694,7 +683,7 @@
     },
     {
       "date": "2026-07-01",
-      "score": 35
+      "score": 34
     },
     {
       "date": "2026-07-02",
@@ -710,7 +699,7 @@
     },
     {
       "date": "2026-07-08",
-      "score": 39
+      "score": 37
     },
     {
       "date": "2026-07-09",
@@ -722,11 +711,11 @@
     },
     {
       "date": "2026-07-13",
-      "score": 55
+      "score": 53
     },
     {
       "date": "2026-07-14",
-      "score": 50
+      "score": 49
     },
     {
       "date": "2026-07-15",
@@ -734,87 +723,87 @@
     },
     {
       "date": "2026-07-16",
-      "score": 56
+      "score": 54
     },
     {
       "date": "2026-07-17",
-      "score": 39
-    },
-    {
-      "date": "2026-07-20",
-      "score": 31
-    },
-    {
-      "date": "2026-07-21",
-      "score": 39
-    },
-    {
-      "date": "2026-07-22",
-      "score": 47
-    },
-    {
-      "date": "2026-07-23",
-      "score": 42
-    },
-    {
-      "date": "2026-07-24",
-      "score": 50
-    },
-    {
-      "date": "2026-07-27",
-      "score": 52
-    },
-    {
-      "date": "2026-07-28",
-      "score": 53
-    },
-    {
-      "date": "2026-07-29",
-      "score": 30
-    },
-    {
-      "date": "2026-07-30",
       "score": 38
     },
     {
-      "date": "2026-07-31",
+      "date": "2026-07-20",
+      "score": 27
+    },
+    {
+      "date": "2026-07-21",
+      "score": 36
+    },
+    {
+      "date": "2026-07-22",
+      "score": 43
+    },
+    {
+      "date": "2026-07-23",
+      "score": 33
+    },
+    {
+      "date": "2026-07-24",
+      "score": 45
+    },
+    {
+      "date": "2026-07-27",
+      "score": 46
+    },
+    {
+      "date": "2026-07-28",
       "score": 48
     },
     {
+      "date": "2026-07-29",
+      "score": 24
+    },
+    {
+      "date": "2026-07-30",
+      "score": 33
+    },
+    {
+      "date": "2026-07-31",
+      "score": 42
+    },
+    {
       "date": "2026-08-03",
-      "score": 56
+      "score": 53
     },
     {
       "date": "2026-08-04",
-      "score": 61
+      "score": 63
     },
     {
       "date": "2026-08-05",
-      "score": 69
+      "score": 73
     },
     {
       "date": "2026-08-06",
-      "score": 67
+      "score": 68
     },
     {
       "date": "2026-08-07",
-      "score": 67
+      "score": 69
     },
     {
       "date": "2026-08-10",
-      "score": 75
-    },
-    {
-      "date": "2026-08-11",
-      "score": 71
-    },
-    {
-      "date": "2026-08-12",
       "score": 77
     },
     {
+      "date": "2026-08-11",
+      "score": 73
+    },
+    {
+      "date": "2026-08-12",
+      "score": 79
+    },
+    {
       "date": "2026-08-13",
-      "score": 78
+      "score": 82
     },
     {
       "date": "2026-08-14",
@@ -822,31 +811,31 @@
     },
     {
       "date": "2026-08-17",
-      "score": 72
-    },
-    {
-      "date": "2026-08-18",
-      "score": 67
-    },
-    {
-      "date": "2026-08-19",
-      "score": 72
-    },
-    {
-      "date": "2026-08-20",
-      "score": 62
-    },
-    {
-      "date": "2026-08-21",
-      "score": 74
-    },
-    {
-      "date": "2026-08-24",
       "score": 73
     },
     {
+      "date": "2026-08-18",
+      "score": 71
+    },
+    {
+      "date": "2026-08-19",
+      "score": 78
+    },
+    {
+      "date": "2026-08-20",
+      "score": 65
+    },
+    {
+      "date": "2026-08-21",
+      "score": 73
+    },
+    {
+      "date": "2026-08-24",
+      "score": 71
+    },
+    {
       "date": "2026-08-25",
-      "score": 69
+      "score": 68
     },
     {
       "date": "2026-08-26",
@@ -854,23 +843,23 @@
     },
     {
       "date": "2026-08-27",
-      "score": 63
+      "score": 64
     },
     {
       "date": "2026-08-28",
-      "score": 61
+      "score": 62
     },
     {
       "date": "2026-08-31",
-      "score": 54
+      "score": 53
     },
     {
       "date": "2026-09-01",
-      "score": 44
+      "score": 39
     },
     {
       "date": "2026-09-02",
-      "score": 51
+      "score": 47
     },
     {
       "date": "2026-09-03",
@@ -878,175 +867,179 @@
     },
     {
       "date": "2026-09-04",
-      "score": 46
+      "score": 45
     },
     {
-      "date": "2026-09-08",
-      "score": 35
-    },
-    {
-      "date": "2026-09-09",
-      "score": 34
-    },
-    {
-      "date": "2026-09-10",
-      "score": 31
-    },
-    {
-      "date": "2026-09-11",
-      "score": 41
-    },
-    {
-      "date": "2026-09-14",
-      "score": 33
-    },
-    {
-      "date": "2026-09-15",
-      "score": 33
-    },
-    {
-      "date": "2026-09-16",
-      "score": 30
-    },
-    {
-      "date": "2026-09-17",
-      "score": 41
-    },
-    {
-      "date": "2026-09-18",
-      "score": 44
-    },
-    {
-      "date": "2026-09-21",
-      "score": 48
-    },
-    {
-      "date": "2026-09-22",
-      "score": 57
-    },
-    {
-      "date": "2026-09-23",
-      "score": 55
-    },
-    {
-      "date": "2026-09-24",
-      "score": 52
-    },
-    {
-      "date": "2026-09-25",
-      "score": 53
-    },
-    {
-      "date": "2026-09-28",
-      "score": 44
-    },
-    {
-      "date": "2026-09-29",
-      "score": 37
-    },
-    {
-      "date": "2026-09-30",
-      "score": 35
-    },
-    {
-      "date": "2026-10-01",
-      "score": 31
-    },
-    {
-      "date": "2026-10-02",
-      "score": 36
-    },
-    {
-      "date": "2026-10-05",
+      "date": "2026-09-07",
       "score": 42
     },
     {
-      "date": "2026-10-06",
-      "score": 51
-    },
-    {
-      "date": "2026-10-07",
-      "score": 46
-    },
-    {
-      "date": "2026-10-08",
-      "score": 43
-    },
-    {
-      "date": "2026-10-09",
-      "score": 44
-    },
-    {
-      "date": "2026-10-12",
-      "score": 49
-    },
-    {
-      "date": "2026-10-13",
-      "score": 50
-    },
-    {
-      "date": "2026-10-14",
-      "score": 44
-    },
-    {
-      "date": "2026-10-15",
-      "score": 41
-    },
-    {
-      "date": "2026-10-16",
-      "score": 32
-    },
-    {
-      "date": "2026-10-19",
-      "score": 22
-    },
-    {
-      "date": "2026-10-20",
-      "score": 30
-    },
-    {
-      "date": "2026-10-21",
-      "score": 28
-    },
-    {
-      "date": "2026-10-22",
-      "score": 26
-    },
-    {
-      "date": "2026-10-23",
-      "score": 14
-    },
-    {
-      "date": "2026-10-26",
-      "score": 17
-    },
-    {
-      "date": "2026-10-27",
-      "score": 20
-    },
-    {
-      "date": "2026-10-28",
-      "score": 24
-    },
-    {
-      "date": "2026-10-29",
+      "date": "2026-09-08",
       "score": 34
     },
     {
+      "date": "2026-09-09",
+      "score": 31
+    },
+    {
+      "date": "2026-09-10",
+      "score": 24
+    },
+    {
+      "date": "2026-09-11",
+      "score": 33
+    },
+    {
+      "date": "2026-09-14",
+      "score": 25
+    },
+    {
+      "date": "2026-09-15",
+      "score": 28
+    },
+    {
+      "date": "2026-09-16",
+      "score": 21
+    },
+    {
+      "date": "2026-09-17",
+      "score": 33
+    },
+    {
+      "date": "2026-09-18",
+      "score": 37
+    },
+    {
+      "date": "2026-09-21",
+      "score": 45
+    },
+    {
+      "date": "2026-09-22",
+      "score": 55
+    },
+    {
+      "date": "2026-09-23",
+      "score": 48
+    },
+    {
+      "date": "2026-09-24",
+      "score": 44
+    },
+    {
+      "date": "2026-09-25",
+      "score": 48
+    },
+    {
+      "date": "2026-09-28",
+      "score": 38
+    },
+    {
+      "date": "2026-09-29",
+      "score": 34
+    },
+    {
+      "date": "2026-09-30",
+      "score": 32
+    },
+    {
+      "date": "2026-10-01",
+      "score": 30
+    },
+    {
+      "date": "2026-10-02",
+      "score": 33
+    },
+    {
+      "date": "2026-10-05",
+      "score": 36
+    },
+    {
+      "date": "2026-10-06",
+      "score": 46
+    },
+    {
+      "date": "2026-10-07",
+      "score": 42
+    },
+    {
+      "date": "2026-10-08",
+      "score": 45
+    },
+    {
+      "date": "2026-10-09",
+      "score": 46
+    },
+    {
+      "date": "2026-10-12",
+      "score": 52
+    },
+    {
+      "date": "2026-10-13",
+      "score": 55
+    },
+    {
+      "date": "2026-10-14",
+      "score": 49
+    },
+    {
+      "date": "2026-10-15",
+      "score": 46
+    },
+    {
+      "date": "2026-10-16",
+      "score": 37
+    },
+    {
+      "date": "2026-10-19",
+      "score": 25
+    },
+    {
+      "date": "2026-10-20",
+      "score": 34
+    },
+    {
+      "date": "2026-10-21",
+      "score": 32
+    },
+    {
+      "date": "2026-10-22",
+      "score": 30
+    },
+    {
+      "date": "2026-10-23",
+      "score": 17
+    },
+    {
+      "date": "2026-10-26",
+      "score": 20
+    },
+    {
+      "date": "2026-10-27",
+      "score": 22
+    },
+    {
+      "date": "2026-10-28",
+      "score": 26
+    },
+    {
+      "date": "2026-10-29",
+      "score": 38
+    },
+    {
       "date": "2026-10-30",
-      "score": 23
+      "score": 27
     },
     {
       "date": "2026-11-02",
-      "score": 19
+      "score": 22
     },
     {
       "date": "2026-11-03",
-      "score": 10
+      "score": 12
     },
     {
       "date": "2026-11-04",
-      "score": 28
+      "score": 33
     },
     {
       "date": "2026-11-05",
@@ -1054,47 +1047,51 @@
     },
     {
       "date": "2026-11-06",
-      "score": 4
-    },
-    {
-      "date": "2026-11-09",
-      "score": 15
-    },
-    {
-      "date": "2026-11-10",
-      "score": 16
-    },
-    {
-      "date": "2026-11-11",
-      "score": 23
-    },
-    {
-      "date": "2026-11-12",
-      "score": 20
-    },
-    {
-      "date": "2026-11-13",
-      "score": 32
-    },
-    {
-      "date": "2026-11-16",
-      "score": 18
-    },
-    {
-      "date": "2026-11-17",
-      "score": 6
-    },
-    {
-      "date": "2026-11-18",
       "score": 5
     },
     {
-      "date": "2026-11-19",
+      "date": "2026-11-09",
+      "score": 17
+    },
+    {
+      "date": "2026-11-10",
+      "score": 17
+    },
+    {
+      "date": "2026-11-11",
+      "score": 24
+    },
+    {
+      "date": "2026-11-12",
+      "score": 19
+    },
+    {
+      "date": "2026-11-13",
+      "score": 28
+    },
+    {
+      "date": "2026-11-16",
+      "score": 17
+    },
+    {
+      "date": "2026-11-17",
       "score": 4
     },
     {
-      "date": "2026-11-20",
+      "date": "2026-11-18",
+      "score": 4
+    },
+    {
+      "date": "2026-11-19",
       "score": 1
+    },
+    {
+      "date": "2026-11-20",
+      "score": 0
+    },
+    {
+      "date": "2026-11-23",
+      "score": 4
     }
   ]
 }
