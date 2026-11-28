@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-11-27T04:15:43Z",
-  "as_of": "2026-11-26",
-  "score": 9,
+  "generated_at": "2026-11-28T03:54:05Z",
+  "as_of": "2026-11-27",
+  "score": 13,
   "rating": "Extreme Fear",
   "rating_de": "Extreme Angst",
   "previous_close": 9,
-  "one_week_ago": 4,
-  "one_month_ago": 20,
+  "one_week_ago": 1,
+  "one_month_ago": 24,
   "one_year_ago": 43,
   "components": [
     {
       "key": "momentum",
       "name": "Market Momentum",
       "name_de": "Marktmomentum",
-      "score": 2,
+      "score": 4,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -5.2088,
-      "value_label": "S&P 500 vs. 125T-Schnitt: -5.2%",
+      "value": -3.6642,
+      "value_label": "S&P 500 vs. 125T-Schnitt: -3.7%",
       "description_de": "S&P 500 im Vergleich zu seinem gleitenden 125-Tage-Durchschnitt. Deutlich darüber = Gier."
     },
     {
@@ -35,11 +35,11 @@
       "key": "breadth",
       "name": "Stock Price Breadth",
       "name_de": "Marktbreite",
-      "score": 1,
+      "score": 2,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -21.8087,
-      "value_label": "Netto-Aufwärtsvolumen (20T): -21.8%",
+      "value": -20.2691,
+      "value_label": "Netto-Aufwärtsvolumen (20T): -20.3%",
       "description_de": "Volumen steigender minus fallender Aktien des Korbs über 20 Tage (Näherung für den McClellan Volume Summation Index)."
     },
     {
@@ -49,49 +49,45 @@
       "score": 0,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 1.0734,
-      "value_label": "VIX/VIX3M (5T-Ø): 1.07",
+      "value": 1.0629,
+      "value_label": "VIX/VIX3M (5T-Ø): 1.06",
       "description_de": "5-Tage-Schnitt von VIX/VIX3M als Ersatz für die Put/Call-Ratio. Hoher Wert = teure kurzfristige Absicherung = Angst."
     },
     {
       "key": "volatility",
       "name": "Market Volatility",
       "name_de": "Marktvolatilität",
-      "score": 6,
+      "score": 15,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": 39.2381,
-      "value_label": "VIX vs. 50T-Schnitt: +39.2%",
+      "value": 22.5576,
+      "value_label": "VIX vs. 50T-Schnitt: +22.6%",
       "description_de": "VIX im Vergleich zu seinem gleitenden 50-Tage-Durchschnitt. Steigende Volatilität = Angst."
     },
     {
       "key": "safe_haven",
       "name": "Safe Haven Demand",
       "name_de": "Nachfrage nach sicheren Häfen",
-      "score": 0,
+      "score": 4,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -8.8769,
-      "value_label": "SPY − IEF (20T): -8.9 Pp",
+      "value": -6.1252,
+      "value_label": "SPY − IEF (20T): -6.1 Pp",
       "description_de": "20-Tage-Rendite von Aktien (SPY) minus Staatsanleihen (IEF). Anleihen vorne = Flucht in Sicherheit = Angst."
     },
     {
       "key": "junk_bond",
       "name": "Junk Bond Demand",
       "name_de": "Nachfrage nach Hochzinsanleihen",
-      "score": 1,
+      "score": 8,
       "rating": "Extreme Fear",
       "rating_de": "Extreme Angst",
-      "value": -2.5421,
-      "value_label": "HYG − IEF (20T): -2.5 Pp",
+      "value": -1.5272,
+      "value_label": "HYG − IEF (20T): -1.5 Pp",
       "description_de": "20-Tage-Rendite von Hochzinsanleihen (HYG) minus Staatsanleihen (IEF) als Näherung für den Renditeaufschlag. Junk Bonds vorne = Gier."
     }
   ],
   "history": [
-    {
-      "date": "2025-12-01",
-      "score": 48
-    },
     {
       "date": "2025-12-02",
       "score": 56
@@ -1095,6 +1091,10 @@
     {
       "date": "2026-11-26",
       "score": 9
+    },
+    {
+      "date": "2026-11-27",
+      "score": 13
     }
   ]
 }
